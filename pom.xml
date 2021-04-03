@@ -1,15 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <name>treen</name>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.dmytrobilokha</groupId>
-  <artifactId>treen</artifactId>
-  <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
+    <name>treen</name>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.dmytrobilokha</groupId>
+    <artifactId>treen</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
 
-  <properties>
+    <properties>
         <flyway.version>6.5.3</flyway.version>
         <javaee.api.version>8.0</javaee.api.version>
+        <jsr305.version>3.0.2</jsr305.version>
         <slf4j.version>1.7.25</slf4j.version>
         <testng.version>7.3.0</testng.version>
         <mockito.version>3.4.6</mockito.version>
@@ -32,49 +33,55 @@
         <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>
+    </properties>
 
-  <dependencies>
-            <dependency>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-core</artifactId>
-                <version>${flyway.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>${javaee.api.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-jdk14</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>${testng.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>${h2.version}</version>
-                <scope>test</scope>
-            </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${javaee.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${jsr305.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -165,7 +172,7 @@
                 <configuration>
                     <failBuildOnCVSS>7</failBuildOnCVSS>
                     <suppressionFiles>
-                            <suppressionFile>owasp-exclude.xml</suppressionFile>
+                        <suppressionFile>owasp-exclude.xml</suppressionFile>
                     </suppressionFiles>
                 </configuration>
                 <executions>
