@@ -45,3 +45,6 @@ frontend/staged-themes
 frontend/themes
 frontend/jaftmp@
 
+#VSCode stuff
+.vscode
+
