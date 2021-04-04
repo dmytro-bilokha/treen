@@ -30,7 +30,18 @@ build/
 #Swaps
 *.swp
 
+#Front-end stuff
 node_modules
 .DS_Store
 dist
+Thumbs.db
+
+frontend/jet_components
+frontend/node_modules
+frontend/bower_components
+frontend/dist
+frontend/web
+frontend/staged-themes
+frontend/themes
+frontend/jaftmp@
 
