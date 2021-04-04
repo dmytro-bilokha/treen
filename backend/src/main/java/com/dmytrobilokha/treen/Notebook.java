@@ -1,6 +1,5 @@
 package com.dmytrobilokha.treen;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public class Notebook {
@@ -13,7 +12,6 @@ public class Notebook {
         this.notes = notes;
     }
 
-    @Nonnull
     public String getUsername() {
         return username;
     }

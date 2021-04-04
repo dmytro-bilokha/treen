@@ -8,17 +8,17 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <flyway.version>6.5.3</flyway.version>
-        <javaee.api.version>8.0</javaee.api.version>
+        <flyway.version>7.7.2</flyway.version>
+        <javaee.api.version>8.0.1</javaee.api.version>
         <jsr305.version>3.0.2</jsr305.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <testng.version>7.3.0</testng.version>
-        <mockito.version>3.4.6</mockito.version>
+        <testng.version>7.4.0</testng.version>
+        <mockito.version>3.8.0</mockito.version>
         <h2.version>1.4.200</h2.version>
 
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-        <maven.war.plugin.version>3.2.0</maven.war.plugin.version>
+        <maven.war.plugin.version>3.3.1</maven.war.plugin.version>
         <maven.checkstyle.plugin.version>3.1.1</maven.checkstyle.plugin.version>
         <maven.pmd.plugin.version>3.13.0</maven.pmd.plugin.version>
         <maven.spotbugs.plugin.version>4.0.4</maven.spotbugs.plugin.version>
@@ -159,6 +159,9 @@
                                 <banDuplicatePomDependencyVersions/>
                                 <dependencyConvergence/>
                                 <requireUpperBoundDeps/>
+                                <requireMavenVersion>
+                                    <version>3.6.3</version>
+                                </requireMavenVersion>
                             </rules>
                             <fail>true</fail>
                         </configuration>
@@ -175,6 +178,8 @@
                         <suppressionFile>owasp-exclude.xml</suppressionFile>
                     </suppressionFiles>
                 </configuration>
+                <!-- Use mvn dependency-check:check to check dependencies for CVSS, it takes too long, to have it in
+                     the verify phase
                 <executions>
                     <execution>
                         <goals>
@@ -182,6 +187,7 @@
                         </goals>
                     </execution>
                 </executions>
+                -->
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
