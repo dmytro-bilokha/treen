@@ -8,8 +8,9 @@
 /*
  * Your application specific code will go here
  */
-define(['ojs/ojcontext', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout'],
-  function(Context, ResponsiveUtils, ResponsiveKnockoutUtils, ko) {
+define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout'
+  ],
+  function(Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko) {
 
      function ControllerViewModel() {
 
@@ -19,13 +20,18 @@ define(['ojs/ojcontext', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils
 
       // Header
       // Application Name used in Branding Area
-      this.appName = ko.observable("App Name");
+      this.appName = ko.observable("Treen");
       // User Info used in Global Navigation area
       this.userLogin = ko.observable("john.hancock@oracle.com");
-
+      this.moduleConfig = ModuleElementUtils.createConfig({name: 'login/login'});
+      if (this.moduleConfig === undefined) {
+        console.log("is null");
+      } else {
+        console.log("is NOT null");
+      }
       // Footer
       this.footerLinks = [
-        {name: 'About Oracle', linkId: 'aboutOracle', linkTarget:'http://www.oracle.com/us/corporate/index.html#menu-about'},
+        { name: 'About Oracle', id: 'aboutOracle', linkTarget:'http://www.oracle.com/us/corporate/index.html#menu-about'},
         { name: "Contact Us", id: "contactUs", linkTarget: "http://www.oracle.com/us/corporate/contact/index.html" },
         { name: "Legal Notices", id: "legalNotices", linkTarget: "http://www.oracle.com/us/legal/index.html" },
         { name: "Terms Of Use", id: "termsOfUse", linkTarget: "http://www.oracle.com/us/legal/terms/index.html" },

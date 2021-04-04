@@ -84,6 +84,9 @@
     </header>
     <div role="main" class="oj-web-applayout-max-width oj-web-applayout-content">
       <!-- Place your page content here -->
+      <div id="div1">
+        <oj-module config="[[moduleConfig]]"></oj-module>
+      </div>
     </div>
     <footer class="oj-web-applayout-footer" role="contentinfo">
       <div class="oj-web-applayout-footer-item oj-web-applayout-max-width">
@@ -91,7 +94,7 @@
           <oj-bind-for-each data="[[footerLinks]]">
             <template>
               <li>
-                <a :id="[[$current.data.linkId]]" :href="[[$current.data.linkTarget]]">
+                <a :id="[[$current.data.id]]" :href="[[$current.data.linkTarget]]">
                   <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
                 </a>
               </li>
