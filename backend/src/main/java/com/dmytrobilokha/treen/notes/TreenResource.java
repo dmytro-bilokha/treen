@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen;
+package com.dmytrobilokha.treen.notes;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -3,8 +3,19 @@
         Login
     </h4>
     <oj-form-layout max-columns="1" direction="row">
-        <oj-input-text placeholder="Login" label-hint="login" value="{{loginText}}"></oj-input-text>
-        <oj-input-password placeholder="Password" label-hint="password"></oj-input-password>
+        <oj-input-text
+          placeholder="Login"
+          label-hint="login"
+          messages-custom="[[loginErrors]]"
+          value="{{loginText}}">
+        </oj-input-text>
+        <oj-input-password
+          placeholder="Password"
+          label-hint="password"
+          messages-custom="[[passwordErrors]]"
+          value="{{passwordText}}"
+          mask-icon="visible">
+        </oj-input-password>
         <oj-button id="sign-in" chroming="callToAction" on-oj-action="[[loginAction]]">
             SIGN IN
         </oj-button>

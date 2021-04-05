@@ -36,11 +36,11 @@ module.exports = function (configObj) {
     const request = require('request');
     const app = express();
     app.use((req, res, next) => {
-      res.header("Access-Control-Allow-Origin", "*");
+      res.header('Access-Control-Allow-Origin', '*');
       next();
     });
-    app.get("/api/notebook", (req, res) => {
-      const url = "http://localhost:8080/treen-1.0-SNAPSHOT/api/notebook"
+    app.all(/^\/api\/.*$/, (req, res) => {
+      const url = `http://localhost:8080/treen${req.url}`;
       req.pipe(request(url)).pipe(res);
     });
     configObj['express'] = app;

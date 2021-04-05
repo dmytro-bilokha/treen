@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen;
+package com.dmytrobilokha.treen.notes;
 
 import java.util.List;
 
