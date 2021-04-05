@@ -23,12 +23,8 @@ define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 
       this.appName = ko.observable("Treen");
       // User Info used in Global Navigation area
       this.userLogin = ko.observable("john.hancock@oracle.com");
-      this.moduleConfig = ModuleElementUtils.createConfig({name: 'login/login'});
-      if (this.moduleConfig === undefined) {
-        console.log("is null");
-      } else {
-        console.log("is NOT null");
-      }
+      // Module config to show
+      this.moduleConfig = ModuleElementUtils.createConfig({name: 'login'});
       // Footer
       this.footerLinks = [
         { name: 'About Oracle', id: 'aboutOracle', linkTarget:'http://www.oracle.com/us/corporate/index.html#menu-about'},
