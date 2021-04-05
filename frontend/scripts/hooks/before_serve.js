@@ -9,7 +9,7 @@
 
 module.exports = function (configObj) {
   return new Promise((resolve, reject) => {
-    console.log('Running before_serve hook.');
+    console.log('Running customized before_serve hook.');
     // ojet custom connect and serve options
     // { connectOpts, serveOpts } = configObj;
     // const express = require('express');
@@ -32,6 +32,18 @@ module.exports = function (configObj) {
     // configObj['preMiddleware'] = [...];
     // pass back a set of middleware that goes after the default middleware
     // configObj['postMiddleware'] = [...];
+    const express = require('express');
+    const request = require('request');
+    const app = express();
+    app.use((req, res, next) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      next();
+    });
+    app.get("/api/notebook", (req, res) => {
+      const url = "http://localhost:8080/treen-1.0-SNAPSHOT/api/notebook"
+      req.pipe(request(url)).pipe(res);
+    });
+    configObj['express'] = app;
     resolve(configObj);
   });
 };
