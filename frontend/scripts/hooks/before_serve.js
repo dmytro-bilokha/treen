@@ -43,6 +43,10 @@ module.exports = function (configObj) {
       const url = `http://localhost:8080/treen${req.url}`;
       req.pipe(request(url)).pipe(res);
     });
+    app.all(/^\/auth\/.*$/, (req, res) => {
+      const url = `http://localhost:8080/treen${req.url}`;
+      req.pipe(request(url)).pipe(res);
+    });
     configObj['express'] = app;
     resolve(configObj);
   });

@@ -3,7 +3,7 @@ define(["require", "exports", 'knockout', "ojs/ojbootstrap", "ojs/ojknockout", "
     "use strict";
 
     class LoginModel {
-      //TODO: implement spinner, block form during submit, store credentials somewhere, handle errors with message
+      //TODO: implement spinner, block form during submit, handle errors with message
       constructor() {
         const self = this;
         self.loginText = ko.observable('');
@@ -26,16 +26,16 @@ define(["require", "exports", 'knockout', "ojs/ojbootstrap", "ojs/ojknockout", "
             return true;
           }
           $.ajax({
-            dataType: 'json',
-            url: '/api/user',
-            username: self.loginText(),
-            password: self.passwordText()
+            url: '/auth/login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({login: self.loginText(), password: self.passwordText()}),
           }).done((data, textStatus, jqXHR) => {
             console.log('Success');
             console.log(textStatus);
             console.log(data);
             const rootViewModel = ko.dataFor(document.getElementById('globalBody'));
-            rootViewModel.userLogin(data.username);
+            rootViewModel.userLogin(self.loginText());
           }).fail((jqXHR, textStatus, errorThrown) => {
             console.log("Fail :-(");
             console.log(textStatus);
