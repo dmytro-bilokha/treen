@@ -1,30 +1,45 @@
 package com.dmytrobilokha.treen.login;
 
+import javax.annotation.CheckForNull;
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
+
 public class LoginData {
 
-    private String login;
-    private String password;
+    @CheckForNull
+    private final String login;
+    @CheckForNull
+    private final String password;
+    private final boolean rememberMe;
 
+    @JsonbCreator
+    public LoginData(@CheckForNull @JsonbProperty("login") String login,
+                     @CheckForNull @JsonbProperty("password") String password,
+                     @JsonbProperty("rememberMe") boolean rememberMe) {
+        this.login = login;
+        this.password = password;
+        this.rememberMe = rememberMe;
+    }
+
+    @CheckForNull
     public String getLogin() {
         return login;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
+    @CheckForNull
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public boolean isRememberMe() {
+        return rememberMe;
     }
 
     @Override
     public String toString() {
         return "LoginData{"
                 + "login='" + login + '\''
+                + ", rememberMe=" + rememberMe
                 + '}';
     }
 

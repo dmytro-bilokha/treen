@@ -10,12 +10,13 @@
  */
 define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout'
   ],
-  function(Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko) {
+  function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko) {
 
-     function ControllerViewModel() {
+    function ControllerViewModel() {
 
       // Media queries for repsonsive layouts
       const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
+      const self = this;
       this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
       // Header
@@ -23,21 +24,37 @@ define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 
       this.appName = ko.observable("Treen");
       // User Info used in Global Navigation area
       this.userLogin = ko.observable("john.hancock@oracle.com");
+      // Action menu in Global Navigation area
+      this.userMenuAction = (event) => {
+        if (event.detail.selectedValue !== 'logout') {
+          return;
+        }
+        $.ajax({
+          url: '/auth/logout',
+        }).done((data, textStatus, jqXHR) => {
+          console.log('Success logout');
+          self.userLogin('LOGGED OUT');
+        }).fail((jqXHR, textStatus, errorThrown) => {
+          console.log("Fail :-(");
+          console.log(textStatus);
+          console.log(errorThrown);
+        });
+      };
       // Module config to show
-      this.moduleConfig = ModuleElementUtils.createConfig({name: 'login'});
+      this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
       // Footer
       this.footerLinks = [
-        { name: 'About Oracle', id: 'aboutOracle', linkTarget:'http://www.oracle.com/us/corporate/index.html#menu-about'},
+        { name: 'About Oracle', id: 'aboutOracle', linkTarget: 'http://www.oracle.com/us/corporate/index.html#menu-about' },
         { name: "Contact Us", id: "contactUs", linkTarget: "http://www.oracle.com/us/corporate/contact/index.html" },
         { name: "Legal Notices", id: "legalNotices", linkTarget: "http://www.oracle.com/us/legal/index.html" },
         { name: "Terms Of Use", id: "termsOfUse", linkTarget: "http://www.oracle.com/us/legal/terms/index.html" },
         { name: "Your Privacy Rights", id: "yourPrivacyRights", linkTarget: "http://www.oracle.com/us/legal/privacy/index.html" },
       ];
-     }
+    }
 
-     // release the application bootstrap busy state
-     Context.getPageContext().getBusyContext().applicationBootstrapComplete();
+    // release the application bootstrap busy state
+    Context.getPageContext().getBusyContext().applicationBootstrapComplete();
 
-     return new ControllerViewModel();
+    return new ControllerViewModel();
   }
 );
