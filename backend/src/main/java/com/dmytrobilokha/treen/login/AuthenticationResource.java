@@ -42,8 +42,9 @@ public class AuthenticationResource {
 
     @GET
     @Path("logout")
-    public void logout(@Context HttpServletRequest request) {
+    public Response logout(@Context HttpServletRequest request) {
         invalidateRequestSession(request);
+        return Response.ok().build();
     }
 
     private void invalidateRequestSession(HttpServletRequest request) {

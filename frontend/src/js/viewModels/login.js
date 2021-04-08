@@ -1,6 +1,6 @@
-define(["require", "exports", 'knockout', "ojs/ojbootstrap", "ojs/ojknockout", "ojs/ojinputtext", "ojs/ojlabel", "ojs/ojformlayout", "ojs/ojbutton"],
-  function (require, exports, ko) {
-    "use strict";
+define(["require", "exports", 'knockout', 'loginManager', "ojs/ojbootstrap", "ojs/ojknockout", "ojs/ojinputtext", "ojs/ojlabel", "ojs/ojformlayout", "ojs/ojbutton"],
+  function (require, exports, ko, loginManager) {
+    'use strict';
 
     class LoginModel {
       //TODO: implement spinner, block form during submit, handle errors with message
@@ -25,22 +25,7 @@ define(["require", "exports", 'knockout', "ojs/ojbootstrap", "ojs/ojknockout", "
           if (nonValidForm) {
             return true;
           }
-          $.ajax({
-            url: '/auth/login',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({login: self.loginText(), password: self.passwordText()}),
-          }).done((data, textStatus, jqXHR) => {
-            console.log('Success');
-            console.log(textStatus);
-            console.log(data);
-            const rootViewModel = ko.dataFor(document.getElementById('globalBody'));
-            rootViewModel.userLogin(self.loginText());
-          }).fail((jqXHR, textStatus, errorThrown) => {
-            console.log("Fail :-(");
-            console.log(textStatus);
-            console.log(errorThrown);
-          });
+          loginManager.login(this.loginText(), self.passwordText());
           return true;
         };
       }

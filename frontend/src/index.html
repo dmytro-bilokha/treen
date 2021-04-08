@@ -64,7 +64,7 @@
         </div>
         <div class="oj-flex-bar-end">
           <!-- Responsive Toolbar -->
-          <oj-bind-if test="[[userLogin() !== 'LOGGED OUT']]">
+          <oj-bind-if test="[[userLogin() !== '']]">
             <oj-toolbar>
               <oj-menu-button id="userMenu" display="[[smScreen() ? 'icons' : 'all']]" chroming="borderless">
                 <span>

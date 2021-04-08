@@ -8,9 +8,9 @@
 /*
  * Your application specific code will go here
  */
-define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout'
+define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'loginManager', 'ojs/ojknockout'
   ],
-  function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko) {
+  function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko, loginManager) {
 
     function ControllerViewModel() {
 
@@ -23,22 +23,13 @@ define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 
       // Application Name used in Branding Area
       this.appName = ko.observable("Treen");
       // User Info used in Global Navigation area
-      this.userLogin = ko.observable("john.hancock@oracle.com");
+      this.userLogin = loginManager.userLogin;
       // Action menu in Global Navigation area
       this.userMenuAction = (event) => {
         if (event.detail.selectedValue !== 'logout') {
           return;
         }
-        $.ajax({
-          url: '/auth/logout',
-        }).done((data, textStatus, jqXHR) => {
-          console.log('Success logout');
-          self.userLogin('LOGGED OUT');
-        }).fail((jqXHR, textStatus, errorThrown) => {
-          console.log("Fail :-(");
-          console.log(textStatus);
-          console.log(errorThrown);
-        });
+        loginManager.logout();
       };
       // Module config to show
       this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
