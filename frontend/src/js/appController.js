@@ -8,15 +8,14 @@
 /*
  * Your application specific code will go here
  */
-define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'loginManager', 'ojs/ojknockout'
+define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'loginManager', "ojs/ojarraydataprovider", 'ojs/ojknockout', "ojs/ojmessages"
   ],
-  function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko, loginManager) {
+  function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko, loginManager, ArrayDataProvider) {
 
     function ControllerViewModel() {
 
       // Media queries for repsonsive layouts
       const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
-      const self = this;
       this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
       // Header
@@ -33,6 +32,12 @@ define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 
       };
       // Module config to show
       this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
+      this.applicationMessages = ko.observableArray([{
+        severity: 'error',
+        summary: 'Error summary here',
+        detail: 'Error details',
+      }]);
+      this.dataProvider = new ArrayDataProvider(this.applicationMessages);
       // Footer
       this.footerLinks = [
         { name: 'About Oracle', id: 'aboutOracle', linkTarget: 'http://www.oracle.com/us/corporate/index.html#menu-about' },

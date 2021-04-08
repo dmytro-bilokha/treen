@@ -25,7 +25,17 @@ define(["require", "exports", 'knockout', 'loginManager', "ojs/ojbootstrap", "oj
           if (nonValidForm) {
             return true;
           }
-          loginManager.login(this.loginText(), self.passwordText());
+          loginManager
+            .login(this.loginText(), self.passwordText())
+            .done((data, textStatus, jqXHR) => {
+              console.log('Success');
+              console.log(textStatus);
+              console.log(data);
+            }).fail((jqXHR, textStatus, errorThrown) => {
+              console.log("Fail :-(");
+              console.log(textStatus);
+              console.log(errorThrown);
+            });
           return true;
         };
       }

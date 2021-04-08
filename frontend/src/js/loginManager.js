@@ -4,21 +4,14 @@ function(ko) {
   class LoginManager {
 
     login(login, password) {
-            $.ajax({
-            url: '/auth/login',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({login: login, password: password}),
-          }).done((data, textStatus, jqXHR) => {
-            console.log('Success');
-            console.log(textStatus);
-            console.log(data);
-            this.userLogin(login);
-          }).fail((jqXHR, textStatus, errorThrown) => {
-            console.log("Fail :-(");
-            console.log(textStatus);
-            console.log(errorThrown);
-          });
+      return $.ajax({
+        url: '/auth/login',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ login: login, password: password })
+      }).done(() => {
+        this.userLogin(login);
+      });
     }
 
     logout() {
