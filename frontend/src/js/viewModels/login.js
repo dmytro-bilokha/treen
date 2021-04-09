@@ -1,8 +1,20 @@
-define(["require", "exports", 'knockout', 'loginManager', "ojs/ojbootstrap", "ojs/ojknockout", "ojs/ojinputtext", "ojs/ojlabel", "ojs/ojformlayout", "ojs/ojbutton"],
+define([
+  'require',
+  'exports',
+  'knockout',
+  'loginManager',
+  'ojs/ojbootstrap',
+  'ojs/ojknockout',
+  'ojs/ojinputtext',
+  'ojs/ojlabel',
+  'ojs/ojformlayout',
+  'ojs/ojbutton'
+],
   function (require, exports, ko, loginManager) {
     'use strict';
 
     class LoginModel {
+
       //TODO: implement spinner, block form during submit, handle errors with message
       constructor() {
         this.loginText = ko.observable('');
@@ -31,13 +43,15 @@ define(["require", "exports", 'knockout', 'loginManager', "ojs/ojbootstrap", "oj
               console.log(textStatus);
               console.log(data);
             }).fail((jqXHR, textStatus, errorThrown) => {
-              console.log("Fail :-(");
+              console.log('Fail :-(');
               console.log(textStatus);
               console.log(errorThrown);
             });
           return true;
         };
       }
+
     }
+
     return new LoginModel();
   });

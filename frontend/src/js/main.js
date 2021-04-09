@@ -1,15 +1,4 @@
-/**
- * @license
- * Copyright (c) 2014, 2021, Oracle and/or its affiliates.
- * Licensed under The Universal Permissive License (UPL), Version 1.0
- * as shown at https://oss.oracle.com/licenses/upl/
- * @ignore
- */
 'use strict';
-
-/**
- * Example of Require.js boostrap javascript
- */
 
  // The UserAgent is used to detect IE11. Only IE11 requires ES5.
 (function () {
@@ -60,24 +49,33 @@
  * by some modules), we are listing it explicitly to get the reference to the 'ko'
  * object in the callback
  */
-require(['ojs/ojbootstrap', 'knockout', 'appController', 'ojs/ojknockout', 'ojs/ojbutton', 'ojs/ojtoolbar', 'ojs/ojmenu', 'ojs/ojmodule-element'],
+require([
+  'ojs/ojbootstrap',
+  'knockout',
+  'appController',
+  'ojs/ojknockout',
+  'ojs/ojbutton',
+  'ojs/ojtoolbar',
+  'ojs/ojmenu',
+  'ojs/ojmodule-element'
+],
   function (Bootstrap, ko, app) { // this callback gets executed when all required modules are loaded
 
-      Bootstrap.whenDocumentReady().then(
-        function() {
-          function init() {
-            // Bind your ViewModel for the content of the whole page body.
-            ko.applyBindings(app, document.getElementById('globalBody'));
-          }
-
-          // If running in a hybrid (e.g. Cordova) environment, we need to wait for the deviceready
-          // event before executing any code that might interact with Cordova APIs or plugins.
-          if (document.body.classList.contains('oj-hybrid')) {
-            document.addEventListener("deviceready", init);
-          } else {
-            init();
-          }
+    Bootstrap.whenDocumentReady().then(
+      function () {
+        function init() {
+          // Bind your ViewModel for the content of the whole page body.
+          ko.applyBindings(app, document.getElementById('globalBody'));
         }
-      );
-    }
+
+        // If running in a hybrid (e.g. Cordova) environment, we need to wait for the deviceready
+        // event before executing any code that might interact with Cordova APIs or plugins.
+        if (document.body.classList.contains('oj-hybrid')) {
+          document.addEventListener("deviceready", init);
+        } else {
+          init();
+        }
+      }
+    );
+  }
 );
