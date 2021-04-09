@@ -8,49 +8,60 @@
 /*
  * Your application specific code will go here
  */
-define(['ojs/ojcontext', 'ojs/ojmodule-element-utils', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'loginManager', "ojs/ojarraydataprovider", 'ojs/ojknockout', "ojs/ojmessages"
-  ],
+define([
+  'ojs/ojcontext',
+  'ojs/ojmodule-element-utils',
+  'ojs/ojresponsiveutils',
+  'ojs/ojresponsiveknockoututils',
+  'knockout',
+  'loginManager',
+  "ojs/ojarraydataprovider",
+  'ojs/ojknockout',
+  "ojs/ojmessages"
+],
   function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko, loginManager, ArrayDataProvider) {
+    'use strict';
 
-    function ControllerViewModel() {
+    class ControllerViewModel {
 
-      // Media queries for repsonsive layouts
-      const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
-      this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
+      constructor() {
+        // Media queries for repsonsive layouts
+        const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
+        this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
-      // Header
-      // Application Name used in Branding Area
-      this.appName = ko.observable("Treen");
-      // User Info used in Global Navigation area
-      this.userLogin = loginManager.userLogin;
-      // Action menu in Global Navigation area
-      this.userMenuAction = (event) => {
-        if (event.detail.selectedValue !== 'logout') {
-          return;
-        }
-        loginManager.logout();
-      };
-      // Module config to show
-      this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
-      this.applicationMessages = ko.observableArray([{
-        severity: 'error',
-        summary: 'Error summary here',
-        detail: 'Error details',
-      }]);
-      this.dataProvider = new ArrayDataProvider(this.applicationMessages);
-      // Footer
-      this.footerLinks = [
-        { name: 'About Oracle', id: 'aboutOracle', linkTarget: 'http://www.oracle.com/us/corporate/index.html#menu-about' },
-        { name: "Contact Us", id: "contactUs", linkTarget: "http://www.oracle.com/us/corporate/contact/index.html" },
-        { name: "Legal Notices", id: "legalNotices", linkTarget: "http://www.oracle.com/us/legal/index.html" },
-        { name: "Terms Of Use", id: "termsOfUse", linkTarget: "http://www.oracle.com/us/legal/terms/index.html" },
-        { name: "Your Privacy Rights", id: "yourPrivacyRights", linkTarget: "http://www.oracle.com/us/legal/privacy/index.html" },
-      ];
+        // Header
+        // Application Name used in Branding Area
+        this.appName = ko.observable("Treen");
+        // User Info used in Global Navigation area
+        this.userLogin = loginManager.userLogin;
+        // Action menu in Global Navigation area
+        this.userMenuAction = (event) => {
+          if (event.detail.selectedValue !== 'logout') {
+            return;
+          }
+          loginManager.logout();
+        };
+        // Module config to show
+        this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
+        this.applicationMessages = ko.observableArray([{
+          severity: 'error',
+          summary: 'Error summary here',
+          detail: 'Error details',
+        }]);
+        this.dataProvider = new ArrayDataProvider(this.applicationMessages);
+        // Footer
+        this.footerLinks = [
+          { name: 'About Oracle', id: 'aboutOracle', linkTarget: 'http://www.oracle.com/us/corporate/index.html#menu-about' },
+          { name: "Contact Us", id: "contactUs", linkTarget: "http://www.oracle.com/us/corporate/contact/index.html" },
+          { name: "Legal Notices", id: "legalNotices", linkTarget: "http://www.oracle.com/us/legal/index.html" },
+          { name: "Terms Of Use", id: "termsOfUse", linkTarget: "http://www.oracle.com/us/legal/terms/index.html" },
+          { name: "Your Privacy Rights", id: "yourPrivacyRights", linkTarget: "http://www.oracle.com/us/legal/privacy/index.html" },
+        ];
+      }
     }
 
     // release the application bootstrap busy state
     Context.getPageContext().getBusyContext().applicationBootstrapComplete();
-
     return new ControllerViewModel();
   }
 );
