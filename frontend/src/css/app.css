@@ -1,7 +1,4 @@
-/*
-    Document   : override
-    Created on : <date>
-    Author     : <author>
-    Description:
-        This is where any of your application specific styles should be included
-*/
+#description-dialog {
+    width: 30vw;
+    height: 30vh;
+  }

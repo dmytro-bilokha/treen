@@ -6,10 +6,22 @@
   </h4>
   <oj-tree-view id="treeview" data="[[notesProvider]]">
     <template slot="itemTemplate" data-oj-as="row">
-      <span class="oj-treeview-item-icon"></span>
+      <span class="oj-treeview-item-icon" on-click="[[itemClick]]"></span>
       <span class="oj-treeview-item-text">
-        <oj-bind-text value="[[row.data.title]]"></oj-bind-text>
+        <oj-bind-if test="[[row.data.link !== undefined && row.data.link !== null]]">
+          <a referrerpolicy="no-referrer" target="_blank" :href="[[row.data.link]]">
+            <oj-bind-text value="[[row.data.title]]"></oj-bind-text>
+          </a>
+        </oj-bind-if>
+        <oj-bind-if test="[[row.data.link === undefined || row.data.link === null]]">
+          <oj-bind-text value="[[row.data.title]]"></oj-bind-text>
+        </oj-bind-if>
       </span>
     </template>
   </oj-tree-view>
+  <oj-dialog id="description-dialog" dialog-title="Description" cancel-behavior="icon" drag-affordance="title-bar">
+    <div slot="body">
+      <p><oj-bind-text value="[[currentDescription]]"></oj-bind-text></p>
+    </div>
+    </oj-dialog>
 </div>

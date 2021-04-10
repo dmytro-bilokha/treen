@@ -53,7 +53,7 @@
         <oj-messages id="page-messages" position="{}" display="general"  display-options.category="none" messages="[[dataProvider]]">
         </oj-messages>
       <div id="div1">
-        <oj-module config="[[moduleConfig]]"></oj-module>
+        <oj-module config="[[ModuleElementUtils.createConfig({name: userLogin() === '' ? 'login' : 'notebook'})]]"></oj-module>
       </div>
     </div>
     <footer class="oj-web-applayout-footer" role="contentinfo">

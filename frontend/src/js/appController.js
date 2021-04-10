@@ -45,11 +45,13 @@ define([
         // Module config to show
         //this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
         this.moduleConfig = ModuleElementUtils.createConfig({ name: 'notebook' });
+        this.ModuleElementUtils = ModuleElementUtils;
         this.dataProvider = new ArrayDataProvider(notificationManager.notifications);
       }
 
     }
 
+    loginManager.init();
     // release the application bootstrap busy state
     Context.getPageContext().getBusyContext().applicationBootstrapComplete();
     return new ControllerViewModel();

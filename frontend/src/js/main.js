@@ -59,6 +59,9 @@ require([
   'ojs/ojmenu',
   'ojs/ojmodule-element',
   'ojs/ojtreeview',
+  'ojs/ojdialog',
+  'ojs/ojinputtext',
+  'ojs/ojformlayout'
 ],
   function (Bootstrap, ko, app) { // this callback gets executed when all required modules are loaded
 

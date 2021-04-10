@@ -24,10 +24,16 @@ define([
           url: '/auth/logout',
         }).done(() => {
           this.userLogin('');
-        }).fail((jqXHR, textStatus, errorThrown) => {
-          console.log('Fail :-(');
-          console.log(textStatus);
-          console.log(errorThrown);
+        });
+      }
+
+      init() {
+        $.ajax({
+          url: '/auth/user',
+        }).done((data) => {
+          this.userLogin(data.login);
+        }).fail(() => {
+          this.userLogin('');
         });
       }
 
