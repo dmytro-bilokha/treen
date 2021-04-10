@@ -3,6 +3,7 @@ define([
   'exports',
   'knockout',
   'loginManager',
+  'notificationManager',
   'ojs/ojbootstrap',
   'ojs/ojknockout',
   'ojs/ojinputtext',
@@ -10,17 +11,17 @@ define([
   'ojs/ojformlayout',
   'ojs/ojbutton'
 ],
-  function (require, exports, ko, loginManager) {
+  function (require, exports, ko, loginManager, notificationManager) {
     'use strict';
 
     class LoginModel {
 
-      //TODO: implement spinner, block form during submit, handle errors with message
       constructor() {
         this.loginText = ko.observable('');
         this.loginErrors = ko.observableArray();
         this.passwordText = ko.observable('');
         this.passwordErrors = ko.observableArray();
+        this.inputDisabled = ko.observable(false);
         this.loginAction = () => {
           this.loginErrors.removeAll();
           this.passwordErrors.removeAll();
@@ -36,16 +37,24 @@ define([
           if (nonValidForm) {
             return true;
           }
+          this.inputDisabled(true);
+          notificationManager.removeAllNotificationsOfType('login');
           loginManager
             .login(this.loginText(), this.passwordText())
-            .done((data, textStatus, jqXHR) => {
-              console.log('Success');
-              console.log(textStatus);
-              console.log(data);
-            }).fail((jqXHR, textStatus, errorThrown) => {
-              console.log('Fail :-(');
-              console.log(textStatus);
-              console.log(errorThrown);
+            .done(() => {
+              this.loginText('');
+              this.passwordText('');
+            })
+            .fail((jqXHR, textStatus, errorThrown) => {
+              notificationManager.addNotification({
+                severity: 'error',
+                summary: 'Login failed',
+                detail: `${textStatus} - ${errorThrown}`,
+                type: 'login'
+              });
+            })
+            .always(() => {
+              this.inputDisabled(false);
             });
           return true;
         };

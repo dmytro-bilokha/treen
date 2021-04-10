@@ -14,14 +14,15 @@ define([
           data: JSON.stringify({ login: login, password: password })
         }).done(() => {
           this.userLogin(login);
+        }).fail(() => {
+          this.userLogin('');
         });
       }
 
       logout() {
-        $.ajax({
+        return $.ajax({
           url: '/auth/logout',
-        }).done((data, textStatus, jqXHR) => {
-          console.log('Success logout');
+        }).done(() => {
           this.userLogin('');
         }).fail((jqXHR, textStatus, errorThrown) => {
           console.log('Fail :-(');

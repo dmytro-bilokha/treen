@@ -5,11 +5,12 @@ define([
   'ojs/ojresponsiveknockoututils',
   'knockout',
   'loginManager',
+  'notificationManager',
   'ojs/ojarraydataprovider',
   'ojs/ojknockout',
   'ojs/ojmessages'
 ],
-  function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko, loginManager, ArrayDataProvider) {
+  function (Context, ModuleElementUtils, ResponsiveUtils, ResponsiveKnockoutUtils, ko, loginManager, notificationManager, ArrayDataProvider) {
     'use strict';
 
     class ControllerViewModel {
@@ -29,16 +30,22 @@ define([
           if (event.detail.selectedValue !== 'logout') {
             return;
           }
-          loginManager.logout();
+          notificationManager.removeAllNotificationsOfType('login');
+          loginManager
+            .logout()
+            .fail((jqXHR, textStatus, errorThrown) => {
+              notificationManager.addNotification({
+                severity: 'error',
+                summary: 'Logout failed',
+                detail: `${textStatus} - ${errorThrown}`,
+                type: 'login'
+              });
+            });
         };
         // Module config to show
-        this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
-        this.applicationMessages = ko.observableArray([{
-          severity: 'error',
-          summary: 'Error summary here',
-          detail: 'Error details',
-        }]);
-        this.dataProvider = new ArrayDataProvider(this.applicationMessages);
+        //this.moduleConfig = ModuleElementUtils.createConfig({ name: 'login' });
+        this.moduleConfig = ModuleElementUtils.createConfig({ name: 'notebook' });
+        this.dataProvider = new ArrayDataProvider(notificationManager.notifications);
       }
 
     }

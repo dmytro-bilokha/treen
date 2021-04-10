@@ -7,16 +7,18 @@
           placeholder="Login"
           label-hint="login"
           messages-custom="[[loginErrors]]"
-          value="{{loginText}}">
+          value="{{loginText}}"
+          disabled="[[inputDisabled]]">
         </oj-input-text>
         <oj-input-password
           placeholder="Password"
           label-hint="password"
           messages-custom="[[passwordErrors]]"
           value="{{passwordText}}"
+          disabled="[[inputDisabled]]"
           mask-icon="visible">
         </oj-input-password>
-        <oj-button id="sign-in" chroming="callToAction" on-oj-action="[[loginAction]]">
+        <oj-button id="sign-in" chroming="callToAction" on-oj-action="[[loginAction]]" disabled="[[inputDisabled]]">
             SIGN IN
         </oj-button>
     </oj-form-layout>
