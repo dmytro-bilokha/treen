@@ -29,7 +29,7 @@ define([
 
       init() {
         $.ajax({
-          url: '/auth/user',
+          url: '/api/user',
         }).done((data) => {
           this.userLogin(data.login);
         }).fail(() => {

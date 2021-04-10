@@ -7,7 +7,11 @@
   <display-name>Treen</display-name>
 
   <login-config>
-    <auth-method>BASIC</auth-method>
+    <auth-method>FORM</auth-method>
+    <form-login-config>
+      <form-login-page>/auth/fail</form-login-page>
+      <form-error-page>/auth/fail</form-error-page>
+    </form-login-config>
     <realm-name>UserDatabase</realm-name>
   </login-config>
 

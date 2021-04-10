@@ -54,4 +54,10 @@ public class AuthenticationResource {
         }
     }
 
+    @GET
+    @Path("fail")
+    public Response failLogin() {
+        return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
 }
