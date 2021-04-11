@@ -1,2 +1,6 @@
 <FindBugsFilter>
+        <Match>
+        <!-- CDI requires classes to have no-args constructor, due to this the rule creates false-positives -->
+        <Bug pattern="NP_NONNULL_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+    </Match>
 </FindBugsFilter>

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,19 +22,32 @@ public class AuthenticationResource {
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationResource.class);
     private static final int HALF_HOUR_SECONDS = 3600 / 2;
 
+    private UserData userData;
+
+    public AuthenticationResource() {
+        //Framework requirement
+    }
+
+    @Inject
+    public AuthenticationResource(UserData userData) {
+        this.userData = userData;
+    }
+
     @POST
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(@Context HttpServletRequest request, LoginData loginData) {
-        if (loginData.getLogin() == null || loginData.getPassword() == null) {
+        var login = loginData.getLogin();
+        var password = loginData.getPassword();
+        if (login == null || password == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        if (loginData.getLogin().startsWith("tom") && loginData.getPassword().startsWith("tom")) {
+        if (login.startsWith("tom") && password.startsWith("tom")) {
             invalidateRequestSession(request);
             var session = request.getSession(true);
             session.setMaxInactiveInterval(loginData.isRememberMe() ? -1 : HALF_HOUR_SECONDS);
-            session.setAttribute("userData", new UserData(loginData.getLogin()));
+            userData.setLogin(loginData.getLogin());
             return Response.ok().build();
         }
         LOG.warn("Failed to login using {}", loginData);
@@ -43,6 +57,7 @@ public class AuthenticationResource {
     @GET
     @Path("logout")
     public Response logout(@Context HttpServletRequest request) {
+        userData.setLogin(null);
         invalidateRequestSession(request);
         return Response.ok().build();
     }

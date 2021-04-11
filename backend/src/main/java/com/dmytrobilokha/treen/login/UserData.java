@@ -1,15 +1,22 @@
 package com.dmytrobilokha.treen.login;
 
-public class UserData {
+import javax.annotation.CheckForNull;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
 
-    private final String login;
+@SessionScoped
+public class UserData implements Serializable {
 
-    public UserData(String login) {
-        this.login = login;
-    }
+    @CheckForNull
+    private String login;
 
+    @CheckForNull
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(@CheckForNull String login) {
+        this.login = login;
     }
 
     @Override
