@@ -3,7 +3,7 @@ package com.dmytrobilokha.treen.login;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
+import javax.enterprise.context.RequestScoped;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@RequestScoped
 @Path("/auth")
 public class AuthenticationResource {
 
@@ -28,16 +29,15 @@ public class AuthenticationResource {
         if (loginData.getLogin() == null || loginData.getPassword() == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        invalidateRequestSession(request);
-        try {
-            request.login(loginData.getLogin(), loginData.getPassword());
-        } catch (ServletException e) {
-            LOG.warn("Failed to login using {}", loginData, e);
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+        if (loginData.getLogin().startsWith("tom") && loginData.getPassword().startsWith("tom")) {
+            invalidateRequestSession(request);
+            var session = request.getSession(true);
+            session.setMaxInactiveInterval(loginData.isRememberMe() ? -1 : HALF_HOUR_SECONDS);
+            session.setAttribute("userData", new UserData(loginData.getLogin()));
+            return Response.ok().build();
         }
-        var session = request.getSession(true);
-        session.setMaxInactiveInterval(loginData.isRememberMe() ? -1 : HALF_HOUR_SECONDS);
-        return Response.ok().build();
+        LOG.warn("Failed to login using {}", loginData);
+        return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 
     @GET
@@ -52,12 +52,6 @@ public class AuthenticationResource {
         if (session != null) {
             session.invalidate();
         }
-    }
-
-    @GET
-    @Path("fail")
-    public Response failLogin() {
-        return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 
 }

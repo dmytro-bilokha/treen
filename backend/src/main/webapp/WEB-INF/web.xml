@@ -6,30 +6,4 @@
 
   <display-name>Treen</display-name>
 
-  <login-config>
-    <auth-method>FORM</auth-method>
-    <form-login-config>
-      <form-login-page>/auth/fail</form-login-page>
-      <form-error-page>/auth/fail</form-error-page>
-    </form-login-config>
-    <realm-name>UserDatabase</realm-name>
-  </login-config>
-
-  <security-role>
-    <role-name>*</role-name>
-  </security-role>
-
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>API</web-resource-name>
-      <url-pattern>/api/*</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-      <role-name>*</role-name>
-    </auth-constraint>
-    <user-data-constraint>
-      <transport-guarantee>NONE</transport-guarantee>
-    </user-data-constraint>
-  </security-constraint>
-
 </web-app>
