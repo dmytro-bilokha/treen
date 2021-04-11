@@ -6,12 +6,12 @@ define([
 
     class LoginManager {
 
-      login(login, password) {
+      login(login, password, rememberMe) {
         return $.ajax({
           url: '/auth/login',
           type: 'POST',
           contentType: 'application/json',
-          data: JSON.stringify({ login: login, password: password })
+          data: JSON.stringify({ login: login, password: password, rememberMe: rememberMe})
         }).done(() => {
           this.userLogin(login);
         }).fail(() => {

@@ -9,7 +9,8 @@ define([
   'ojs/ojinputtext',
   'ojs/ojlabel',
   'ojs/ojformlayout',
-  'ojs/ojbutton'
+  'ojs/ojbutton',
+  'ojs/ojcheckboxset'
 ],
   function (require, exports, ko, loginManager, notificationManager) {
     'use strict';
@@ -21,6 +22,7 @@ define([
         this.loginErrors = ko.observableArray();
         this.passwordText = ko.observable('');
         this.passwordErrors = ko.observableArray();
+        this.rememberMeSet = ko.observableArray();
         this.inputDisabled = ko.observable(false);
         this.loginAction = () => {
           this.loginErrors.removeAll();
@@ -38,9 +40,10 @@ define([
             return true;
           }
           this.inputDisabled(true);
+          const rememberMe = this.rememberMeSet().length > 0;
           notificationManager.removeAllNotificationsOfType('login');
           loginManager
-            .login(this.loginText(), this.passwordText())
+            .login(this.loginText(), this.passwordText(), rememberMe)
             .done(() => {
               this.loginText('');
               this.passwordText('');
