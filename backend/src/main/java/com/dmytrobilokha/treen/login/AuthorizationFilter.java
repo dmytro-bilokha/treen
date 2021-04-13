@@ -17,22 +17,22 @@ public class AuthorizationFilter implements Filter {
 
     private static final Set<String> SECURED_PATHS = Set.of("/api/");
 
-    private UserData userData;
+    private UserSessionData userSessionData;
 
     public AuthorizationFilter() {
         //Framework
     }
 
     @Inject
-    public AuthorizationFilter(UserData userData) {
-        this.userData = userData;
+    public AuthorizationFilter(UserSessionData userSessionData) {
+        this.userSessionData = userSessionData;
     }
 
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
-        if (userData.getLogin() != null) {
+        if (userSessionData.getLoginData() != null) {
             chain.doFilter(request, response);
             return;
         }

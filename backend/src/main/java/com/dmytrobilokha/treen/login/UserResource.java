@@ -13,21 +13,26 @@ import javax.ws.rs.core.MediaType;
 @Path("/api/user")
 public class UserResource {
 
-    private UserData userData;
+    private UserSessionData userSessionData;
 
     public UserResource() {
         //Framework
     }
 
     @Inject
-    public UserResource(UserData userData) {
-        this.userData = userData;
+    public UserResource(UserSessionData userSessionData) {
+        this.userSessionData = userSessionData;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public UserData getUserData(@Context HttpServletRequest request) {
-        return userData;
+    public UserDataResponse getUserData(@Context HttpServletRequest request) {
+        var loginData = userSessionData.getLoginData();
+        if (loginData == null) {
+            throw new IllegalStateException(
+                    "Authorization filter should not allow non-authenticated user to call this endpoint");
+        }
+        return new UserDataResponse(loginData.getLogin());
     }
 
 }

@@ -13,8 +13,8 @@ public class TreenResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Notebook getNotes(@Context SecurityContext securityContext) {
-        var notebook = new Notebook(securityContext.getUserPrincipal().getName(),
+    public NoteNode getNotes(@Context SecurityContext securityContext) {
+        var notebook = new NoteNode(securityContext.getUserPrincipal().getName(),
                                     List.of("one", "two", "three"));
         return notebook;
     }

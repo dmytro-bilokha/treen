@@ -2,12 +2,12 @@ package com.dmytrobilokha.treen.notes;
 
 import java.util.List;
 
-public class Notebook {
+public class NoteNode {
 
     private final String username;
     private final List<String> notes;
 
-    Notebook(String username, List<String> notes) {
+    NoteNode(String username, List<String> notes) {
         this.username = username;
         this.notes = notes;
     }
