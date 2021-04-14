@@ -46,7 +46,7 @@ public class AuthenticationResource {
         if (login == null || password == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        var userEntity = authenticationService.findUserByCredentials(login, password.toCharArray());
+        var userEntity = authenticationService.checkUserCredentials(login, password.toCharArray());
         if (userEntity != null) {
             invalidateRequestSession(request);
             var session = request.getSession(true);

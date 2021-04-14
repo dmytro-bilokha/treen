@@ -44,4 +44,18 @@ public class UserRepository {
         }
     }
 
+    public int insertUser(String login, byte[] passwordHash, byte[] passwordSalt) throws DbException {
+        try(var connection = dataSource.getConnection();
+            var statement = connection.prepareStatement(
+                    "INSERT INTO user_data (login, password_hash, password_salt) VALUES (?, ?, ?)")) {
+            statement.setString(1, login);
+            statement.setBytes(2, passwordHash);
+            statement.setBytes(3, passwordSalt);
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException("Failure while trying to store user with login '" + login +'\'', e);
+        }
+
+    }
+
 }

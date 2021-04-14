@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class LoginData implements Serializable {
 
-    private long userId;
-    private String login;
+    private final long userId;
+    private final String login;
 
     public LoginData(long userId, String login) {
         this.userId = userId;
