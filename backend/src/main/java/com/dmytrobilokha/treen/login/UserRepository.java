@@ -33,10 +33,10 @@ public class UserRepository {
                 if (!resultSet.next()) {
                     return null;
                 }
-                var userId = resultSet.getObject(1, Long.class);
-                var userLogin = resultSet.getString(2);
-                var userPasswordHash = resultSet.getBinaryStream(3).readAllBytes();
-                var userPasswordSalt = resultSet.getBinaryStream(4).readAllBytes();
+                var userId = resultSet.getLong("id");
+                var userLogin = resultSet.getString("login");
+                var userPasswordHash = resultSet.getBinaryStream("password_hash").readAllBytes();
+                var userPasswordSalt = resultSet.getBinaryStream("password_salt").readAllBytes();
                 return new UserEntity(userId, userLogin, userPasswordHash, userPasswordSalt);
             }
         } catch (SQLException | IOException e) {
@@ -55,7 +55,6 @@ public class UserRepository {
         } catch (SQLException e) {
             throw new DbException("Failure while trying to store user with login '" + login +'\'', e);
         }
-
     }
 
 }

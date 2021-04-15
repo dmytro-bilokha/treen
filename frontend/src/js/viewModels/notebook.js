@@ -3,9 +3,10 @@ define([
   'exports',
   'knockout',
   'ojs/ojarraytreedataprovider',
+  'notebookManager',
   'ojs/ojknockout',
 ],
-  function (require, exports, ko, ArrayTreeDataProvider) {
+  function (require, exports, ko, ArrayTreeDataProvider, notebookManager) {
     'use strict';
 
     class NotebookModel {
@@ -20,38 +21,10 @@ define([
           }
           return true;
         };
-        this.notesProvider = new ArrayTreeDataProvider(
-          [
-            {
-              "title":"News",
-              "id":"news",
-              "link":"https://www.linux.org.ru",
-              "description": "This is the dialog content.\
-               User can change dialog resize behavior, cancel behavior and drag behavior by setting attributes.\
-                Default attribute value depends on the theme."
-            },
-            {
-              "title":"Blogs",
-              "id":"blogs",
-              "link":"https://www.linux.org.ru",
-              "children":[
-                {
-                  "title":"Today",
-                  "id":"today"
-                },
-                {
-                  "title":"Yesterday",
-              "link":"https://www.linux.org.ru",
-                  "id":"yesterday"
-                },
-                {
-                  "title":"Archive",
-              "link":"https://www.linux.org.ru",
-                  "id":"archive"
-                }
-              ]
-            }
-          ]);
+        this.connected = () => {
+          notebookManager.init();
+        }
+        this.notesProvider = new ArrayTreeDataProvider(notebookManager.notes);
       }
 
     }

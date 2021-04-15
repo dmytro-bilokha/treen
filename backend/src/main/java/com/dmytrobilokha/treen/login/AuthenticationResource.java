@@ -40,7 +40,8 @@ public class AuthenticationResource {
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(@Context HttpServletRequest request, LoginRequest loginRequest) throws InternalApplicationException {
+    public Response login(
+            @Context HttpServletRequest request, LoginRequest loginRequest) throws InternalApplicationException {
         var login = loginRequest.getLogin();
         var password = loginRequest.getPassword();
         if (login == null || password == null) {

@@ -6,3 +6,16 @@ CREATE TABLE user_data
 , CONSTRAINT user_data_pk PRIMARY KEY (id)
 , CONSTRAINT user_data_login_uq UNIQUE (login)
 );
+
+CREATE TABLE note
+( id BIGINT NOT NULL AUTO_INCREMENT
+, parent_id BIGINT
+, user_id BIGINT NOT NULL
+, title VARCHAR(150)
+, link VARCHAR(256)
+, description VARCHAR(2000)
+, version BIGINT NOT NULL
+, CONSTRAINT notes_pk PRIMARY KEY (id)
+, CONSTRAINT notes_parent_id_fk FOREIGN KEY (parent_id) REFERENCES notes (id)
+, CONSTRAINT notes_user_id_fk FOREIGN KEY (user_id) REFERENCES user_data (id)
+);
