@@ -1,10 +1,10 @@
 package com.dmytrobilokha.treen.notes;
 
 import javax.annotation.CheckForNull;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class NoteNodeDto {
+public class NoteNodeDto implements Comparable<NoteNodeDto> {
 
     private long id;
     @CheckForNull
@@ -16,6 +16,29 @@ public class NoteNodeDto {
     private long version;
     @CheckForNull
     private List<NoteNodeDto> children;
+
+    @Override
+    public int compareTo(NoteNodeDto o) {
+        int baseResult = getComparisonBase().compareTo(o.getComparisonBase());
+        if (baseResult != 0) {
+            return baseResult;
+        }
+        return Long.compare(id, o.id);
+    }
+
+    private String getComparisonBase() {
+        if (title != null) {
+            return title;
+        }
+        if (link != null) {
+            return link;
+        }
+        if (description != null) {
+            return description;
+        }
+        //This should never happen
+        return "";
+    }
 
     public long getId() {
         return id;

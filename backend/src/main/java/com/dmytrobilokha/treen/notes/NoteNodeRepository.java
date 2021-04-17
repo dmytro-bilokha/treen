@@ -47,4 +47,21 @@ public class NoteNodeRepository {
         }
     }
 
+    public int updateNoteNode(NoteNodeEntity noteNode) throws DbException {
+        try(var connection = dataSource.getConnection();
+            var statement = connection.prepareStatement(
+                    "UPDATE note SET title=?, link=?, description=?, version=version+1"
+                    + " WHERE id=? AND user_id=? AND version=?")) {
+            statement.setString(1, noteNode.getTitle());
+            statement.setString(2, noteNode.getLink());
+            statement.setString(3, noteNode.getDescription());
+            statement.setLong(4, noteNode.getId());
+            statement.setLong(5, noteNode.getUserId());
+            statement.setLong(6, noteNode.getVersion());
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException("Failure while trying to update note with id=" + noteNode.getId(), e);
+        }
+    }
+
 }

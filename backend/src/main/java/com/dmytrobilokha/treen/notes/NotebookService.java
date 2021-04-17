@@ -1,12 +1,15 @@
 package com.dmytrobilokha.treen.notes;
 
 import com.dmytrobilokha.treen.InternalApplicationException;
+import com.dmytrobilokha.treen.OptimisticLockException;
 import com.dmytrobilokha.treen.db.DbException;
 
+import javax.annotation.CheckForNull;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,9 +57,22 @@ public class NotebookService {
         for (Map.Entry<Long, List<NoteNodeDto>> entry : nodesByParentId.entrySet()) {
             var parentId = entry.getKey();
             var children = entry.getValue();
+            Collections.sort(children);
             nodeById.get(parentId).setChildren(children);
         }
         return rootNodes;
+    }
+
+    public void updateNoteNode(NoteNodeEntity note) throws InternalApplicationException, OptimisticLockException {
+        int count;
+        try {
+            count = noteNodeRepository.updateNoteNode(note);
+        } catch (DbException e) {
+            throw new InternalApplicationException("Failed to update note in the DB", e);
+        }
+        if (count == 0) {
+            throw new OptimisticLockException("Unable to update, your note is outdated");
+        }
     }
 
 }

@@ -37,11 +37,16 @@ define([
         });
       }
 
+      registerFailedAuthorization() {
+        this.userLogin('');
+      }
+
       constructor() {
         this.userLogin = ko.observable('');
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.init = this.init.bind(this);
+        this.registerFailedAuthorization = this.registerFailedAuthorization.bind(this);
       }
 
     }

@@ -1,18 +1,27 @@
 define([
   'knockout'
 ],
-  function (ko) {
+  function (ko, loginManager) {
     'use strict';
 
     class NotebookManager {
 
       init() {
-        $.ajax({
+        return $.ajax({
           url: '/api/notebook',
         }).done((data) => {
           this.notes(data);
-        }).fail(() => {
-          console.log('Failed to get the notebook');
+        });
+      }
+
+      updateNote(note) {
+        return $.ajax({
+          url: '/api/notebook/note',
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify(note)
+        }).done((data) => {
+          this.notes(data);
         });
       }
 

@@ -6,7 +6,7 @@
   </h4>
   <oj-tree-view id="treeview" data="[[notesProvider]]">
     <template slot="itemTemplate" data-oj-as="row">
-      <span class="oj-treeview-item-icon" on-click="[[itemClick]]"></span>
+      <span class="oj-treeview-item-icon" on-click="[[openNoteDialog]]"></span>
       <span class="oj-treeview-item-text">
         <oj-bind-if test="[[row.data.link !== undefined && row.data.link !== null 
                             && row.data.title !== undefined && row.data.title !== null]]">
@@ -27,9 +27,25 @@
       </span>
     </template>
   </oj-tree-view>
-  <oj-dialog id="description-dialog" dialog-title="Description" cancel-behavior="icon" drag-affordance="title-bar">
+  <oj-dialog id="note-dialog" dialog-title="Note" cancel-behavior="icon" drag-affordance="title-bar">
     <div slot="body">
-      <p><oj-bind-text value="[[currentDescription]]"></oj-bind-text></p>
+      <oj-form-layout max-columns="1" direction="row">
+        <oj-input-text class="oj-form-control-max-width-md" placeholder="Title" label-hint="title" value="{{currentTitle}}" disabled="[[inputDisabled]]">
+        </oj-input-text>
+        <oj-input-text class="oj-form-control-max-width-md" placeholder="Link" label-hint="link" value="{{currentLink}}" disabled="[[inputDisabled]]">
+        </oj-input-text>
+        <oj-text-area class="oj-form-control-max-width-md" value="{{currentDescription}}" label-hint="description" rows="4">
+        </oj-text-area>
+        <div>
+          <oj-button id="note-submit" chroming="callToAction" on-oj-action="[[submitAction]]"
+            disabled="[[inputDisabled]]">
+            Submit
+          </oj-button>
+          <oj-button id="note-close" on-oj-action="[[closeNoteDialog]]" disabled="[[inputDisabled]]">
+            Close
+          </oj-button>
+        </div>
+      </oj-form-layout>
     </div>
-    </oj-dialog>
+  </oj-dialog>
 </div>
