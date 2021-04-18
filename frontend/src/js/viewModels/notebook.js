@@ -42,6 +42,7 @@ define([
         this.submitAction = () => {
           this.titleErrors.removeAll();
           this.linkErrors.removeAll();
+          notificationManager.removeAllNotificationsOfType('edit-note');
           if (!this.isFormValid()) {
             this.titleErrors.push({ summary: 'Invalid data', detail: 'Either title of link should not be empty', severity: 'error' });
             this.linkErrors.push({ summary: 'Invalid data', detail: 'Either title or link should not be empty', severity: 'error' });
@@ -50,9 +51,9 @@ define([
           this.inputDisabled(true);
           notebookManager.updateNote({
             id: this.currentId(),
-            title: this.currentTitle(),
-            link: this.currentLink(),
-            description: this.currentDescription(),
+            title: this.currentTitle() === undefined ? null : this.currentTitle(),
+            link: this.currentLink() === undefined ? null : this.currentLink(),
+            description: this.currentDescription() === undefined ? null : this.currentDescription(),
             version: this.currentVersion()
           }).fail((jqXHR, textStatus, errorThrown) => {
             if (errorThrown === 'Unathorized') {
@@ -68,7 +69,7 @@ define([
                 severity: 'error',
                 summary: 'Operation has failed',
                 detail: `${textStatus} - ${errorThrown}`,
-                type: 'note'
+                type: 'edit-note'
               });
             }
           }).done(() => {
@@ -106,7 +107,7 @@ define([
             });
         }
 
-        this.notesProvider = new ArrayTreeDataProvider(notebookManager.notes);
+        this.notesProvider = new ArrayTreeDataProvider(notebookManager.notesTree);
       }
 
     }
