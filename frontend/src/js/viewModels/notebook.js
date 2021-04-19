@@ -85,6 +85,24 @@ define([
           return true;
         };
 
+        this.menuBeforeOpen = (event) => {
+          const target = event.detail.originalEvent.target;
+          const treeView = document.getElementById("treeview");
+          const context = treeView.getContextByNode(target);
+          this.currentMenuKey = context ? context.key : treeView.currentItem;
+        };
+
+      this.menuAction = (event) => {
+          const text = event.target.textContent;
+          this.notesProvider
+              .fetchByKeys({ keys: new Set([this.currentMenuKey]) })
+              .then((e) => {
+              if (e.results.get(this.currentMenuKey)) {
+                  console.log(text + " from " + e.results.get(this.currentMenuKey).data.title);
+              }
+          });
+      };
+
         this.connected = () => {
           notebookManager.init()
             .fail((jqXHR, textStatus, errorThrown) => {

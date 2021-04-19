@@ -49,6 +49,19 @@ define([
         });
       }
 
+      getNodeSortingString(node) {
+        if (node.title !== undefined && node.title !== null) {
+          return node.title;
+        }
+        if (node.link !== undefined && node.link !== null) {
+          return node.link;
+        }
+        if (node.description !== undefined && node.description !== null) {
+          return node.description;
+        }
+        return '';
+      }
+
       updateNote(note) {
         return $.ajax({
           url: '/api/notebook/note',
@@ -68,8 +81,31 @@ define([
           if (targetNode.children) {
             updatedNode.children = ko.observableArray(targetNode.children());
           }
-          //targetLocation.enclosingArray.splice(targetLocation.index, 1, updatedNode);
-          targetLocation.enclosingArray.replace(targetNode, updatedNode);
+          if (targetLocation.enclosingArray().length === 1) {
+            //If the array has only one element, we don't simply replace it, but add new - remove old to avoid parent node to shrink
+            targetLocation.enclosingArray.push(updatedNode);
+            targetLocation.enclosingArray.shift();
+          } else {
+            targetLocation.enclosingArray.splice(targetLocation.index, 1, updatedNode);
+            //For arrays bigger than 1 element, update could affect sorting order, so we need to sort the array
+            targetLocation.enclosingArray.sort((left, right) => {
+              const leftString = this.getNodeSortingString(left);
+              const rightString = this.getNodeSortingString(right);
+              if (leftString < rightString) {
+                return -1;
+              }
+              if (leftString > rightString) {
+                return 1;
+              }
+              if (left.id < right.id) {
+                return -1;
+              }
+              if (left.id > right.id) {
+                return 1;
+              }
+              return 0;
+            });
+          }
         });
       }
 
