@@ -49,34 +49,21 @@ define([
             return true;
           }
           this.inputDisabled(true);
-          notebookManager.updateNote({
+          const noteData = {
             id: this.currentId(),
             parentId: this.currentParentId(),
             title: this.currentTitle() === undefined ? null : this.currentTitle(),
             link: this.currentLink() === undefined ? null : this.currentLink(),
             description: this.currentDescription() === undefined ? null : this.currentDescription(),
-          }).fail((jqXHR, textStatus, errorThrown) => {
-            if (errorThrown === 'Unathorized') {
-              loginManager.registerFailedAuthorization();
-              notificationManager.addNotification({
-                severity: 'error',
-                summary: 'Authorization error',
-                detail: 'You need to login to access the notebook',
-                type: 'login'
-              });
-            } else {
-              notificationManager.addNotification({
-                severity: 'error',
-                summary: 'Operation has failed',
-                detail: `${textStatus} - ${errorThrown}`,
-                type: 'edit-note'
-              });
-            }
-          }).done(() => {
-            document.getElementById('note-dialog').close();
-          }).always(() => {
-            this.inputDisabled(false);
-          });
+          };
+          const notebookAction = noteData.id ? notebookManager.updateNote(noteData) : notebookManager.createNote(noteData);
+          notebookAction
+            .fail(this.handleServerError)
+            .done(() => {
+              document.getElementById('note-dialog').close();
+            }).always(() => {
+              this.inputDisabled(false);
+            });
           return true;
         };
 
@@ -92,6 +79,15 @@ define([
           this.currentMenuKey = context ? context.key : treeView.currentItem;
         };
 
+        this.openNewNoteDialog = (parentId) => {
+          this.currentId(null);
+          this.currentParentId(parentId);
+          this.currentTitle(null);
+          this.currentLink(null);
+          this.currentDescription(null);
+          document.getElementById('note-dialog').open();
+        };
+
         this.menuAction = (event) => {
           const actionCode = event.target.value;
           this.notesProvider
@@ -99,34 +95,50 @@ define([
             .then((e) => {
               const actionTarget = e.results.get(this.currentMenuKey);
               if (actionTarget) {
-                if (actionCode === 'edit') {
-                  this.openNoteDialog(null, actionTarget);
+                switch (actionCode) {
+                  case 'edit':
+                    this.openNoteDialog(null, actionTarget);
+                    break;
+
+                  case 'addChild':
+                    this.openNewNoteDialog(actionTarget.data.id);
+                    break;
+
+                  case 'addSibling':
+                    this.openNewNoteDialog(actionTarget.data.parentId);
+                    break;
+
+                  case 'delete':
+                    notebookManager.deleteNote(actionTarget.data)
+                      .fail(this.handleServerError);
+                    break;
                 }
-                console.log(actionCode + " from " + actionTarget.data.id);
               }
             });
         };
 
+        this.handleServerError = (jqXHR, textStatus, errorThrown) => {
+          if (errorThrown === 'Unauthorized') {
+            loginManager.registerFailedAuthorization();
+            notificationManager.addNotification({
+              severity: 'error',
+              summary: 'Authorization error',
+              detail: 'You need to login to access the notebook',
+              type: 'login'
+            });
+          } else {
+            notificationManager.addNotification({
+              severity: 'error',
+              summary: 'Operation has failed',
+              detail: `${textStatus} - ${errorThrown}`,
+              type: 'note'
+            });
+          }
+        };
+
         this.connected = () => {
           notebookManager.init()
-            .fail((jqXHR, textStatus, errorThrown) => {
-              if (errorThrown === 'Unathorized') {
-                loginManager.registerFailedAuthorization();
-                notificationManager.addNotification({
-                  severity: 'error',
-                  summary: 'Authorization error',
-                  detail: 'You need to login to access the notebook',
-                  type: 'login'
-                });
-              } else {
-                notificationManager.addNotification({
-                  severity: 'error',
-                  summary: 'Operation has failed',
-                  detail: `${textStatus} - ${errorThrown}`,
-                  type: 'note'
-                });
-              }
-            });
+            .fail(this.handleServerError);
         }
 
         this.notesProvider = new ArrayTreeDataProvider(notebookManager.notesTree);

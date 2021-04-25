@@ -61,6 +61,7 @@ public class NotebookService {
             Collections.sort(children);
             nodeById.get(parentId).setChildren(children);
         }
+        Collections.sort(rootNodes);
         notebook.setNotes(rootNodes);
         return notebook;
     }
