@@ -1,30 +1,27 @@
-package com.dmytrobilokha.treen.notes;
+package com.dmytrobilokha.treen.notes.persistence;
 
 import javax.annotation.CheckForNull;
 
-public class NoteNodeEntity {
+public class NewNote {
 
-    private final long id;
     @CheckForNull
-    private final Long parentId;
-    private final long userId;
+    protected final Long parentId;
+    protected final long userId;
     @CheckForNull
-    private final String title;
+    protected final String title;
     @CheckForNull
-    private final String link;
+    protected final String link;
     @CheckForNull
-    private final String description;
-    private final long version;
+    protected final String description;
+    protected final long version;
 
-    public NoteNodeEntity(
-            long id,
+    public NewNote(
             @CheckForNull Long parentId,
             long userId,
             @CheckForNull String title,
             @CheckForNull String link,
             @CheckForNull String description,
             long version) {
-        this.id = id;
         this.parentId = parentId;
         this.userId = userId;
         this.title = title;
@@ -33,8 +30,13 @@ public class NoteNodeEntity {
         this.version = version;
     }
 
-    public long getId() {
-        return id;
+    public NewNote(NewNote original) {
+        this.parentId = original.parentId;
+        this.userId = original.userId;
+        this.title = original.title;
+        this.link = original.link;
+        this.description = original.description;
+        this.version = original.version;
     }
 
     @CheckForNull
@@ -67,14 +69,12 @@ public class NoteNodeEntity {
 
     @Override
     public String toString() {
-        return "NoteNodeEntity{"
-                + "id=" + id
+        return "NewNote{"
                 + ", parentId=" + parentId
                 + ", userId=" + userId
                 + ", title='" + title + '\''
                 + ", link='" + link + '\''
                 + ", description='" + description + '\''
-                + ", version=" + version
                 + '}';
     }
 

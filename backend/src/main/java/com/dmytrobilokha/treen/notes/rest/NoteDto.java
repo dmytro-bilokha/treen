@@ -1,24 +1,24 @@
-package com.dmytrobilokha.treen.notes;
+package com.dmytrobilokha.treen.notes.rest;
 
 import javax.annotation.CheckForNull;
-import java.util.Comparator;
 import java.util.List;
 
-public class NoteNodeDto implements Comparable<NoteNodeDto> {
+public class NoteDto implements Comparable<NoteDto> {
 
     private long id;
+    @CheckForNull
+    private Long parentId;
     @CheckForNull
     private String title;
     @CheckForNull
     private String link;
     @CheckForNull
     private String description;
-    private long version;
     @CheckForNull
-    private List<NoteNodeDto> children;
+    private List<NoteDto> children;
 
     @Override
-    public int compareTo(NoteNodeDto o) {
+    public int compareTo(NoteDto o) {
         int baseResult = getComparisonBase().compareTo(o.getComparisonBase());
         if (baseResult != 0) {
             return baseResult;
@@ -49,6 +49,15 @@ public class NoteNodeDto implements Comparable<NoteNodeDto> {
     }
 
     @CheckForNull
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(@CheckForNull Long parentId) {
+        this.parentId = parentId;
+    }
+
+    @CheckForNull
     public String getTitle() {
         return title;
     }
@@ -75,20 +84,12 @@ public class NoteNodeDto implements Comparable<NoteNodeDto> {
         this.description = description;
     }
 
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
     @CheckForNull
-    public List<NoteNodeDto> getChildren() {
+    public List<NoteDto> getChildren() {
         return children;
     }
 
-    public void setChildren(List<NoteNodeDto> children) {
+    public void setChildren(List<NoteDto> children) {
         this.children = children;
     }
 

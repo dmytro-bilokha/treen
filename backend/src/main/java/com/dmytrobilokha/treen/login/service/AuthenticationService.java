@@ -1,7 +1,9 @@
-package com.dmytrobilokha.treen.login;
+package com.dmytrobilokha.treen.login.service;
 
 import com.dmytrobilokha.treen.InternalApplicationException;
 import com.dmytrobilokha.treen.db.DbException;
+import com.dmytrobilokha.treen.login.persistence.UserEntity;
+import com.dmytrobilokha.treen.login.persistence.UserRepository;
 
 import javax.annotation.CheckForNull;
 import javax.crypto.SecretKeyFactory;
@@ -36,7 +38,7 @@ public class AuthenticationService implements AuthenticationServiceMXBean {
     public UserEntity checkUserCredentials(String login, char[] password) throws InternalApplicationException {
         UserEntity userEntity;
         try {
-            userEntity = userRepository.getUserByLogin(login);
+            userEntity = userRepository.findUserByLogin(login);
         } catch (DbException e) {
             throw new InternalApplicationException("Db error while authenticating user", e);
         }
@@ -52,6 +54,7 @@ public class AuthenticationService implements AuthenticationServiceMXBean {
         return userEntity;
     }
 
+    @Override
     public void createUser(String login, String password) throws InternalApplicationException {
         var salt = new byte[16];
         var random = new SecureRandom();
@@ -64,13 +67,13 @@ public class AuthenticationService implements AuthenticationServiceMXBean {
     }
 
     private byte[] calculatePasswordHash(char[] password, byte[] salt) throws InternalApplicationException {
-        var spec = new PBEKeySpec(password, salt, HASHING_ITERATIONS, PBE_KEY_BITS);
         SecretKeyFactory keyFactory;
         try {
             keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
         } catch (NoSuchAlgorithmException e) {
             throw new InternalApplicationException("Failed to create SecretKeyFactory", e);
         }
+        var spec = new PBEKeySpec(password, salt, HASHING_ITERATIONS, PBE_KEY_BITS);
         try {
             return keyFactory.generateSecret(spec).getEncoded();
         } catch (InvalidKeySpecException e) {

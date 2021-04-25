@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen.login;
+package com.dmytrobilokha.treen.login.rest;
 
 import javax.annotation.CheckForNull;
 import javax.enterprise.context.SessionScoped;
@@ -21,6 +21,14 @@ public class UserSessionData implements Serializable {
     @CheckForNull
     public LoginData getLoginData() {
         return loginData;
+    }
+
+    public long getAuthenticatedUserId() {
+        var userLoginData = loginData;
+        if (userLoginData == null) {
+            throw new IllegalStateException("Authorization filter should not allow non authenticated access");
+        }
+        return userLoginData.getUserId();
     }
 
 }

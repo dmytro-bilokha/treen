@@ -10,10 +10,10 @@ define([
         return ko.observableArray(data.map((node) => {
           const newNode = {
             id: node.id,
+            parentId: node.parentId,
             title: node.title,
             link: node.link,
             description: node.description,
-            version: node.version
           };
           if (node.children) {
             newNode.children = this.buildNestedObservable(node.children);
@@ -44,8 +44,9 @@ define([
       init() {
         return $.ajax({
           url: '/api/notebook',
-        }).done((data) => {
-          this.notesTree(this.buildNestedObservable(data)());
+        }).done((notebook) => {
+          this.notebookVersion = notebook.version;
+          this.notesTree(this.buildNestedObservable(notebook.notes)());
         });
       }
 
@@ -67,17 +68,25 @@ define([
           url: '/api/notebook/note',
           type: 'PUT',
           contentType: 'application/json',
-          data: JSON.stringify(note)
+          data: JSON.stringify({
+            id: note.id,
+            parentId: note.parentId,
+            title: note.title,
+            link: note.link,
+            description: note.description,
+            version: this.notebookVersion
+          })
         }).done(() => {
           const targetLocation = this.findNodePlace(this.notesTree, note.id);
           const targetNode = targetLocation.enclosingArray()[targetLocation.index];
           const updatedNode = {
             id: targetNode.id,
+            parentId: note.parentId,
             title: note.title,
             link: note.link,
             description: note.description,
-            version: note.version + 1
           };
+          this.notebookVersion += 1;
           if (targetNode.children) {
             updatedNode.children = ko.observableArray(targetNode.children());
           }
@@ -111,6 +120,7 @@ define([
 
       constructor() {
         this.notesTree = ko.observableArray();
+        this.notebookVersion = 0;
         this.init = this.init.bind(this);
       }
 

@@ -7,14 +7,20 @@ import javax.enterprise.inject.Produces;
 import javax.sql.DataSource;
 
 @ApplicationScoped
-public class DataSourceProducer {
+public class DbServicesProducer {
 
     @Resource(name = "jdbc/TreenDB")
     private DataSource dataSource;
 
     @Dependent
     @Produces
-    DataSource produce() {
+    DbQueryExecutor produceDbQueryExecutor() {
+        return new DbQueryExecutor(dataSource);
+    }
+
+    @Dependent
+    @Produces
+    DataSource produceDbDataSource() {
         return dataSource;
     }
 

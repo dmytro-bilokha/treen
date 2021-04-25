@@ -6,4 +6,8 @@ public class InternalApplicationException extends Exception {
         super(message, e);
     }
 
+    public InternalApplicationException(String message) {
+        super(message);
+    }
+
 }

@@ -1,6 +1,7 @@
-package com.dmytrobilokha.treen.login;
+package com.dmytrobilokha.treen.login.rest;
 
 import com.dmytrobilokha.treen.InternalApplicationException;
+import com.dmytrobilokha.treen.login.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

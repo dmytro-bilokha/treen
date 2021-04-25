@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen.login;
+package com.dmytrobilokha.treen.login.service;
 
 import com.dmytrobilokha.treen.InternalApplicationException;
 

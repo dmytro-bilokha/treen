@@ -16,27 +16,27 @@ define([
       constructor() {
         this.headMessage = ko.observable(' WTF?');
         this.currentId = ko.observable();
+        this.currentParentId = ko.observable();
         this.currentTitle = ko.observable('');
         this.currentLink = ko.observable('');
         this.currentDescription = ko.observable('');
-        this.currentVersion = ko.observable();
         this.inputDisabled = ko.observable(false);
         this.titleErrors = ko.observableArray();
         this.linkErrors = ko.observableArray();
 
         this.openNoteDialog = (e, d, con) => {
           this.currentId(d.data.id);
+          this.currentParentId(d.data.parentId);
           this.currentTitle(d.data.title);
           this.currentLink(d.data.link);
           this.currentDescription(d.data.description);
-          this.currentVersion(d.data.version);
           document.getElementById('note-dialog').open();
           return true;
         };
 
         this.isFormValid = () => {
           return this.currentTitle() !== undefined && this.currentTitle() !== null && this.currentTitle() !== ''
-            ||  this.currentLink() !== undefined && this.currentLink() !== null && this.currentLink() !== '';
+            || this.currentLink() !== undefined && this.currentLink() !== null && this.currentLink() !== '';
         }
 
         this.submitAction = () => {
@@ -51,10 +51,10 @@ define([
           this.inputDisabled(true);
           notebookManager.updateNote({
             id: this.currentId(),
+            parentId: this.currentParentId(),
             title: this.currentTitle() === undefined ? null : this.currentTitle(),
             link: this.currentLink() === undefined ? null : this.currentLink(),
             description: this.currentDescription() === undefined ? null : this.currentDescription(),
-            version: this.currentVersion()
           }).fail((jqXHR, textStatus, errorThrown) => {
             if (errorThrown === 'Unathorized') {
               loginManager.registerFailedAuthorization();
@@ -92,16 +92,20 @@ define([
           this.currentMenuKey = context ? context.key : treeView.currentItem;
         };
 
-      this.menuAction = (event) => {
-          const text = event.target.textContent;
+        this.menuAction = (event) => {
+          const actionCode = event.target.value;
           this.notesProvider
-              .fetchByKeys({ keys: new Set([this.currentMenuKey]) })
-              .then((e) => {
-              if (e.results.get(this.currentMenuKey)) {
-                  console.log(text + " from " + e.results.get(this.currentMenuKey).data.title);
+            .fetchByKeys({ keys: new Set([this.currentMenuKey]) })
+            .then((e) => {
+              const actionTarget = e.results.get(this.currentMenuKey);
+              if (actionTarget) {
+                if (actionCode === 'edit') {
+                  this.openNoteDialog(null, actionTarget);
+                }
+                console.log(actionCode + " from " + actionTarget.data.id);
               }
-          });
-      };
+            });
+        };
 
         this.connected = () => {
           notebookManager.init()

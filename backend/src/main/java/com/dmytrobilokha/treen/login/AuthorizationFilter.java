@@ -1,5 +1,7 @@
 package com.dmytrobilokha.treen.login;
 
+import com.dmytrobilokha.treen.login.rest.UserSessionData;
+
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

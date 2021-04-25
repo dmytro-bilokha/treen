@@ -118,6 +118,7 @@
                     <rulesets>
                         <ruleset>${basedir}/pmd.xml</ruleset>
                     </rulesets>
+                    <excludeFromFailureFile>pmd-exclude.properties</excludeFromFailureFile>
                     <printFailingErrors>true</printFailingErrors>
                     <!-- Disable xref feature, because it requires another one plugin, but is not used -->
                     <linkXRef>false</linkXRef>

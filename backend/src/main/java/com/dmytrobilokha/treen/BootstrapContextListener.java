@@ -1,7 +1,7 @@
 package com.dmytrobilokha.treen;
 
 import com.dmytrobilokha.treen.db.DbUpdater;
-import com.dmytrobilokha.treen.login.AuthenticationService;
+import com.dmytrobilokha.treen.login.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class BootstrapContextListener implements ServletContextListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(BootstrapContextListener.class);
 
-    private static final String AUTHENTICATION_SERVICE_JMX_NAME = "treen:type=AuthenticationService";
+    private static final String AUTH_SERVICE_JMX_NAME = "treen:type=AuthenticationService";
 
     private DbUpdater dbUpdater;
     private AuthenticationService authenticationService;
@@ -33,8 +33,8 @@ public class BootstrapContextListener implements ServletContextListener {
 
     @Inject
     public BootstrapContextListener(DbUpdater dbUpdater, AuthenticationService authenticationService) {
-       this.dbUpdater = dbUpdater;
-       this.authenticationService = authenticationService;
+        this.dbUpdater = dbUpdater;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class BootstrapContextListener implements ServletContextListener {
     private void registerJmxBean() {
         var server = ManagementFactory.getPlatformMBeanServer();
         try {
-            var objectName = new ObjectName(AUTHENTICATION_SERVICE_JMX_NAME);
+            var objectName = new ObjectName(AUTH_SERVICE_JMX_NAME);
             server.registerMBean(authenticationService, objectName);
         } catch (MBeanRegistrationException | MalformedObjectNameException
                 | InstanceAlreadyExistsException | NotCompliantMBeanException e) {
@@ -62,7 +62,7 @@ public class BootstrapContextListener implements ServletContextListener {
     private void unregisterJmxBean() {
         var server = ManagementFactory.getPlatformMBeanServer();
         try {
-            var objectName = new ObjectName(AUTHENTICATION_SERVICE_JMX_NAME);
+            var objectName = new ObjectName(AUTH_SERVICE_JMX_NAME);
             server.unregisterMBean(objectName);
         } catch (MBeanRegistrationException | MalformedObjectNameException | InstanceNotFoundException e) {
             LOG.error("Failed to unregister authentication service JMX bean", e);

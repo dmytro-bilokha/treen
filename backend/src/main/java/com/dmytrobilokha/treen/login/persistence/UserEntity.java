@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen.login;
+package com.dmytrobilokha.treen.login.persistence;
 
 public class UserEntity {
 

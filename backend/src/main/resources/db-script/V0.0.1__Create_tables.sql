@@ -3,6 +3,7 @@ CREATE TABLE user_data
 , login VARCHAR(120) NOT NULL
 , password_hash VARBINARY(128) NOT NULL
 , password_salt VARBINARY(128) NOT NULL
+, notebook_version BIGINT NOT NULL DEFAULT 1
 , CONSTRAINT user_data_pk PRIMARY KEY (id)
 , CONSTRAINT user_data_login_uq UNIQUE (login)
 );
@@ -14,8 +15,7 @@ CREATE TABLE note
 , title VARCHAR(150)
 , link VARCHAR(256)
 , description VARCHAR(2000)
-, version BIGINT NOT NULL
 , CONSTRAINT notes_pk PRIMARY KEY (id)
-, CONSTRAINT notes_parent_id_fk FOREIGN KEY (parent_id) REFERENCES notes (id)
+, CONSTRAINT notes_parent_id_fk FOREIGN KEY (parent_id) REFERENCES notes (id) ON DELETE CASCADE
 , CONSTRAINT notes_user_id_fk FOREIGN KEY (user_id) REFERENCES user_data (id)
 );
