@@ -1,7 +1,7 @@
 package com.dmytrobilokha.treen.login.persistence;
 
-import com.dmytrobilokha.treen.db.DbException;
-import com.dmytrobilokha.treen.db.DbQueryExecutor;
+import com.dmytrobilokha.treen.infra.db.DbException;
+import com.dmytrobilokha.treen.infra.db.DbQueryExecutor;
 
 import javax.annotation.CheckForNull;
 import javax.enterprise.context.ApplicationScoped;

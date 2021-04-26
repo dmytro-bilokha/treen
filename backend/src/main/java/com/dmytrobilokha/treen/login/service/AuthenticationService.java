@@ -1,7 +1,7 @@
 package com.dmytrobilokha.treen.login.service;
 
-import com.dmytrobilokha.treen.InternalApplicationException;
-import com.dmytrobilokha.treen.db.DbException;
+import com.dmytrobilokha.treen.infra.db.DbException;
+import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
 import com.dmytrobilokha.treen.login.persistence.UserEntity;
 import com.dmytrobilokha.treen.login.persistence.UserRepository;
 

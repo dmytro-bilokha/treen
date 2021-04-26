@@ -42,7 +42,7 @@ define([
         this.submitAction = () => {
           this.titleErrors.removeAll();
           this.linkErrors.removeAll();
-          notificationManager.removeAllNotificationsOfType('edit-note');
+          notificationManager.removeAllNotificationsOfType('note');
           if (!this.isFormValid()) {
             this.titleErrors.push({ summary: 'Invalid data', detail: 'Either title of link should not be empty', severity: 'error' });
             this.linkErrors.push({ summary: 'Invalid data', detail: 'Either title or link should not be empty', severity: 'error' });
@@ -118,19 +118,23 @@ define([
         };
 
         this.handleServerError = (jqXHR, textStatus, errorThrown) => {
+          let serverMessage = null;
+          if (jqXHR.responseJSON) {
+            serverMessage = jqXHR.responseJSON.message;
+          }
           if (errorThrown === 'Unauthorized') {
             loginManager.registerFailedAuthorization();
             notificationManager.addNotification({
               severity: 'error',
               summary: 'Authorization error',
-              detail: 'You need to login to access the notebook',
+              detail: serverMessage ? serverMessage : 'You need to login to access the notebook',
               type: 'login'
             });
           } else {
             notificationManager.addNotification({
               severity: 'error',
               summary: 'Operation has failed',
-              detail: `${textStatus} - ${errorThrown}`,
+              detail: serverMessage ? serverMessage : `${textStatus} - ${errorThrown}`,
               type: 'note'
             });
           }

@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen;
+package com.dmytrobilokha.treen.infra.exception;
 
 public class InternalApplicationException extends Exception {
 

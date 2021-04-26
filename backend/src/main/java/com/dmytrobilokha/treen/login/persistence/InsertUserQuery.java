@@ -1,6 +1,6 @@
 package com.dmytrobilokha.treen.login.persistence;
 
-import com.dmytrobilokha.treen.db.UpsertQuery;
+import com.dmytrobilokha.treen.infra.db.UpsertQuery;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

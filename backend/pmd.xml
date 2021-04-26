@@ -146,7 +146,11 @@
     <!-- Avoid objects with too many dependencies -->
     <rule ref="category/java/design.xml/CouplingBetweenObjects" />
     <!-- Avoid too complex stuff -->
-    <rule ref="category/java/design.xml/CyclomaticComplexity" />
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+    <properties>
+        <property name="methodReportLevel" value="15" />
+    </properties>
+    </rule>
     <!-- Never extend java.lang.Error -->
     <rule ref="category/java/design.xml/DoNotExtendJavaLangError" />
     <!-- Exception is not a GOTO replacement -->

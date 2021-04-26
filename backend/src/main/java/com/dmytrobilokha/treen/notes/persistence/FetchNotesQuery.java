@@ -1,6 +1,6 @@
 package com.dmytrobilokha.treen.notes.persistence;
 
-import com.dmytrobilokha.treen.db.SelectQuery;
+import com.dmytrobilokha.treen.infra.db.SelectQuery;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

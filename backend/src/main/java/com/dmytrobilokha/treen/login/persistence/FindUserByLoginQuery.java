@@ -1,6 +1,6 @@
 package com.dmytrobilokha.treen.login.persistence;
 
-import com.dmytrobilokha.treen.db.SelectQuery;
+import com.dmytrobilokha.treen.infra.db.SelectQuery;
 
 import javax.annotation.CheckForNull;
 import java.io.IOException;

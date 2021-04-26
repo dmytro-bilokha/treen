@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen.db;
+package com.dmytrobilokha.treen.infra.db;
 
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.slf4j.Logger;

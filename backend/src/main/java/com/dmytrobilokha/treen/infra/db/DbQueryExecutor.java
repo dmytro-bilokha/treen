@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen.db;
+package com.dmytrobilokha.treen.infra.db;
 
 import javax.annotation.CheckForNull;
 import javax.sql.DataSource;

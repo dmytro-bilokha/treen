@@ -1,8 +1,8 @@
 package com.dmytrobilokha.treen.notes.service;
 
-import com.dmytrobilokha.treen.InternalApplicationException;
-import com.dmytrobilokha.treen.OptimisticLockException;
-import com.dmytrobilokha.treen.db.DbException;
+import com.dmytrobilokha.treen.infra.db.DbException;
+import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
+import com.dmytrobilokha.treen.infra.exception.OptimisticLockException;
 import com.dmytrobilokha.treen.notes.persistence.NewNote;
 import com.dmytrobilokha.treen.notes.persistence.Note;
 import com.dmytrobilokha.treen.notes.persistence.NoteRepository;

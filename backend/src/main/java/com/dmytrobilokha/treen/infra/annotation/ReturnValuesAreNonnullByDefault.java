@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen.util;
+package com.dmytrobilokha.treen.infra.annotation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierDefault;

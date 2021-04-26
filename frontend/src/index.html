@@ -38,9 +38,7 @@
                 <span slot="endIcon"
                   :class="[[{'oj-icon oj-icon': smScreen(), 'oj-component-icon oj-button-menu-dropdown-icon': !smScreen()}]]"></span>
                 <oj-menu id="menu1" slot="menu" on-oj-menu-action="[[userMenuAction]]">
-                  <oj-option id="pref" value="pref">Preferences</oj-option>
-                  <oj-option id="help" value="help">Help</oj-option>
-                  <oj-option id="about" value="about">About</oj-option>
+                  <oj-option id="reload-notebook" value="reload">Reload Notebook</oj-option>
                   <oj-option id="out" value="logout">Sign Out</oj-option>
                 </oj-menu>
               </oj-menu-button>

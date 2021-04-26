@@ -49,10 +49,14 @@ define([
               this.passwordText('');
             })
             .fail((jqXHR, textStatus, errorThrown) => {
+              let serverMessage = null;
+              if (jqXHR.responseJSON) {
+                serverMessage = jqXHR.responseJSON.message;
+              }
               notificationManager.addNotification({
                 severity: 'error',
                 summary: 'Login failed',
-                detail: `${textStatus} - ${errorThrown}`,
+                detail: serverMessage ? serverMessage : `${textStatus} - ${errorThrown}`,
                 type: 'login'
               });
             })

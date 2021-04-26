@@ -1,7 +1,7 @@
 package com.dmytrobilokha.treen.notes.rest;
 
-import com.dmytrobilokha.treen.InternalApplicationException;
-import com.dmytrobilokha.treen.OptimisticLockException;
+import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
+import com.dmytrobilokha.treen.infra.exception.InvalidInputException;
 import com.dmytrobilokha.treen.login.rest.UserSessionData;
 import com.dmytrobilokha.treen.notes.persistence.NewNote;
 import com.dmytrobilokha.treen.notes.persistence.Note;
@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response;
 public class NotebookResource {
 
     private NotebookService notebookService;
+    private NoteRequestValidator requestValidator;
     private UserSessionData userSessionData;
 
     public NotebookResource() {
@@ -31,8 +32,10 @@ public class NotebookResource {
     }
 
     @Inject
-    public NotebookResource(NotebookService notebookService, UserSessionData userSessionData) {
+    public NotebookResource(
+            NotebookService notebookService, NoteRequestValidator requestValidator, UserSessionData userSessionData) {
         this.notebookService = notebookService;
+        this.requestValidator = requestValidator;
         this.userSessionData = userSessionData;
     }
 
@@ -42,14 +45,12 @@ public class NotebookResource {
         return notebookService.fetchUserNotebook(userSessionData.getAuthenticatedUserId());
     }
 
-    //TODO: validate on request coming from the front-end
-
     @PUT
     @Path("note")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateNote(
-            UpdateNoteRequest request) throws InternalApplicationException, OptimisticLockException {
+    public Response updateNote(UpdateNoteRequest request) throws InternalApplicationException, InvalidInputException {
+        requestValidator.validateUpdate(request);
         var noteNode = new Note(
                 request.getId(),
                 request.getParentId(),
@@ -67,8 +68,8 @@ public class NotebookResource {
     @Path("note")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public NoteDto createNote(
-            CreateNoteRequest request) throws InternalApplicationException, OptimisticLockException {
+    public NoteDto createNote(CreateNoteRequest request) throws InternalApplicationException, InvalidInputException {
+        requestValidator.validateCreation(request);
         var noteNode = new NewNote(
                 request.getParentId(),
                 userSessionData.getAuthenticatedUserId(),
@@ -84,8 +85,8 @@ public class NotebookResource {
     @Path("note")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteNotes(
-            DeleteNoteRequest request) throws InternalApplicationException, OptimisticLockException {
+    public Response deleteNotes(DeleteNoteRequest request) throws InternalApplicationException, InvalidInputException {
+        requestValidator.validateDelete(request);
         notebookService.removeNoteWithChildren(
                 request.getId(), userSessionData.getAuthenticatedUserId(), request.getVersion());
         return Response.ok().build();

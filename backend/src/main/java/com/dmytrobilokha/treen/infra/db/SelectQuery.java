@@ -1,4 +1,4 @@
-package com.dmytrobilokha.treen.db;
+package com.dmytrobilokha.treen.infra.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,6 +1,6 @@
 package com.dmytrobilokha.treen.login.service;
 
-import com.dmytrobilokha.treen.InternalApplicationException;
+import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
 
 public interface AuthenticationServiceMXBean {
 

@@ -1,6 +1,7 @@
 package com.dmytrobilokha.treen.login.rest;
 
-import com.dmytrobilokha.treen.InternalApplicationException;
+import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
+import com.dmytrobilokha.treen.infra.exception.InvalidInputException;
 import com.dmytrobilokha.treen.login.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class AuthenticationResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationResource.class);
     private static final int HALF_HOUR_SECONDS = 3600 / 2;
+    private static final int MAX_LOG_PASSWD_LENGTH = 120;
 
     private UserSessionData userSessionData;
     private AuthenticationService authenticationService;
@@ -41,12 +43,16 @@ public class AuthenticationResource {
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(
-            @Context HttpServletRequest request, LoginRequest loginRequest) throws InternalApplicationException {
+    public Response login(@Context HttpServletRequest request, LoginRequest loginRequest)
+        throws InternalApplicationException, InvalidInputException {
         var login = loginRequest.getLogin();
         var password = loginRequest.getPassword();
         if (login == null || password == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            throw new InvalidInputException("Both login and password must be provided");
+        }
+        if (login.length() > MAX_LOG_PASSWD_LENGTH || password.length() > MAX_LOG_PASSWD_LENGTH) {
+            throw new InvalidInputException("Both login and password should be less than "
+                    + MAX_LOG_PASSWD_LENGTH + " characters");
         }
         var userEntity = authenticationService.checkUserCredentials(login, password.toCharArray());
         if (userEntity != null) {

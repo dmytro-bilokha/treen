@@ -1,6 +1,6 @@
-package com.dmytrobilokha.treen;
+package com.dmytrobilokha.treen.infra.bootstrap;
 
-import com.dmytrobilokha.treen.db.DbUpdater;
+import com.dmytrobilokha.treen.infra.db.DbUpdater;
 import com.dmytrobilokha.treen.login.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
