@@ -30,9 +30,6 @@ define([
         const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
         this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
-        // Header
-        // Application Name used in Branding Area
-        this.appName = ko.observable("Treen");
         // User Info used in Global Navigation area
         this.userLogin = loginManager.userLogin;
         // Action menu in Global Navigation area
