@@ -14,7 +14,6 @@ define([
     class NotebookModel {
 
       constructor() {
-        this.headMessage = ko.observable(' WTF?');
         this.currentId = ko.observable();
         this.currentParentId = ko.observable();
         this.currentTitle = ko.observable('');
@@ -70,6 +69,10 @@ define([
         this.closeNoteDialog = () => {
           document.getElementById('note-dialog').close();
           return true;
+        };
+
+        this.createFirstNote = () => {
+          this.openNewNoteDialog(null);
         };
 
         this.menuBeforeOpen = (event) => {

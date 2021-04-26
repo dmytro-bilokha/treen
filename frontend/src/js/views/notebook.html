@@ -1,9 +1,11 @@
 <div id="notebook-container">
-  <h4 class="oj-sm-margin-4x-top">
-    Login Notebook <span>
-      <oj-bind-text value="[[headMessage]]"></oj-bind-text>
-    </span>
-  </h4>
+  <oj-bind-if test="[[notesProvider.isEmpty() === 'yes']]">
+    <h6 class="oj-sm-margin-4x-top">
+      You don't have any notes in your notebook. <span>
+        <a on-click="[[createFirstNote]]">Click here</a>
+      </span> to create the first note.
+    </h6>
+  </oj-bind-if>
   <oj-tree-view id="treeview" data="[[notesProvider]]">
     <oj-menu slot="contextMenu" 
       on-oj-action="[[menuAction]]"
