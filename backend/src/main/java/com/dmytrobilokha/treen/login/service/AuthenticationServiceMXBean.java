@@ -6,4 +6,5 @@ public interface AuthenticationServiceMXBean {
 
     void createUser(String login, String password) throws InternalApplicationException;
 
+    int changeUserPassword(String login, String password) throws InternalApplicationException;
 }

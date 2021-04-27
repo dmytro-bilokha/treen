@@ -56,14 +56,29 @@ public class AuthenticationService implements AuthenticationServiceMXBean {
 
     @Override
     public void createUser(String login, String password) throws InternalApplicationException {
-        var salt = new byte[16];
-        var random = new SecureRandom();
-        random.nextBytes(salt);
+        var salt = generateSalt();
         try {
             userRepository.insertUser(login, calculatePasswordHash(password.toCharArray(), salt), salt);
         } catch (DbException e) {
             throw new InternalApplicationException("Failed to store user in the DB", e);
         }
+    }
+
+    @Override
+    public int changeUserPassword(String login, String password) throws InternalApplicationException {
+        var salt = generateSalt();
+        try {
+            return userRepository.updateUserPassword(login, calculatePasswordHash(password.toCharArray(), salt), salt);
+        } catch (DbException e) {
+            throw new InternalApplicationException("Failed to store user in the DB", e);
+        }
+    }
+
+    private byte[] generateSalt() {
+        var salt = new byte[16];
+        var random = new SecureRandom();
+        random.nextBytes(salt);
+        return salt;
     }
 
     private byte[] calculatePasswordHash(char[] password, byte[] salt) throws InternalApplicationException {

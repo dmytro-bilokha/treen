@@ -31,4 +31,8 @@ public class UserRepository {
         return queryExecutor.insert(new InsertUserQuery(login, passwordHash, passwordSalt));
     }
 
+    public int updateUserPassword(String login, byte[] passwordHash, byte[] passwordSalt) throws DbException {
+        return queryExecutor.update(new UpdateUserPasswordQuery(login, passwordHash, passwordSalt));
+    }
+
 }
