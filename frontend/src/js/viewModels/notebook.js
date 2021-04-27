@@ -112,12 +112,43 @@ define([
                     break;
 
                   case 'delete':
-                    notebookManager.deleteNote(actionTarget.data)
-                      .fail(this.handleServerError);
+                    if (actionTarget.data.children) {
+                      this.openDeleteDialog(actionTarget.data);
+                    } else {
+                      notebookManager.deleteNote(actionTarget.data)
+                        .fail(this.handleServerError);
+                    }
                     break;
                 }
               }
             });
+        };
+
+        this.openDeleteDialog = (note) => {
+          this.currentId(note.id);
+          this.currentParentId(note.parentId);
+          this.currentTitle(note.title);
+          this.currentLink(note.link);
+          this.currentDescription(note.description);
+          document.getElementById('delete-dialog').open();
+          return true;
+        };
+
+        this.deleteNoteFromDialog = () => {
+          notebookManager.deleteNote({
+            id: this.currentId(),
+            parentId: this.currentParentId(),
+            title: this.currentTitle(),
+            link: this.currentLink(),
+            description: this.currentDescription(),
+          })
+          .fail(this.handleServerError)
+          .done(this.closeDeleteDialog);
+        };
+
+        this.closeDeleteDialog = () => {
+          document.getElementById('delete-dialog').close();
+          return true;
         };
 
         this.handleServerError = (jqXHR, textStatus, errorThrown) => {

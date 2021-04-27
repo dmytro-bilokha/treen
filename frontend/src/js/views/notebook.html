@@ -7,9 +7,7 @@
     </h6>
   </oj-bind-if>
   <oj-tree-view id="treeview" data="[[notesProvider]]">
-    <oj-menu slot="contextMenu" 
-      on-oj-action="[[menuAction]]"
-      on-oj-before-open="[[menuBeforeOpen]]">
+    <oj-menu slot="contextMenu" on-oj-action="[[menuAction]]" on-oj-before-open="[[menuBeforeOpen]]">
       <oj-option id="node-add-child" value="addChild">Add child</oj-option>
       <oj-option id="node-add-sibling" value="addSibling">Add sibling</oj-option>
       <oj-option id="node-delete" value="delete">Delete</oj-option>
@@ -40,11 +38,14 @@
   <oj-dialog id="note-dialog" dialog-title="Note" cancel-behavior="icon" drag-affordance="title-bar">
     <div slot="body">
       <oj-form-layout max-columns="1" direction="row">
-        <oj-input-text class="oj-form-control-max-width-md" placeholder="Title" label-hint="title" value="{{currentTitle}}" disabled="[[inputDisabled]]">
+        <oj-input-text class="oj-form-control-max-width-md" placeholder="Title" label-hint="title"
+          value="{{currentTitle}}" disabled="[[inputDisabled]]">
         </oj-input-text>
-        <oj-input-text class="oj-form-control-max-width-md" placeholder="Link" label-hint="link" value="{{currentLink}}" disabled="[[inputDisabled]]">
+        <oj-input-text class="oj-form-control-max-width-md" placeholder="Link" label-hint="link" value="{{currentLink}}"
+          disabled="[[inputDisabled]]">
         </oj-input-text>
-        <oj-text-area class="oj-form-control-max-width-md" value="{{currentDescription}}" label-hint="description" rows="4">
+        <oj-text-area class="oj-form-control-max-width-md" value="{{currentDescription}}" label-hint="description"
+          rows="4">
         </oj-text-area>
         <div>
           <oj-button id="note-submit" chroming="callToAction" on-oj-action="[[submitAction]]"
@@ -56,6 +57,19 @@
           </oj-button>
         </div>
       </oj-form-layout>
+    </div>
+  </oj-dialog>
+  <oj-dialog id="delete-dialog" dialog-title="Warning" cancel-behavior="icon" drag-affordance="title-bar">
+    <div slot="body">
+      The note has children. Are you sure you want to delete the note with children notes?
+    </div>
+    <div slot="footer">
+      <oj-button id="yes-delete" on-oj-action="[[deleteNoteFromDialog]]">
+        YES
+      </oj-button>
+      <oj-button id="no-delete" on-oj-action="[[closeDeleteDialog]]">
+        NO
+      </oj-button>
     </div>
   </oj-dialog>
 </div>

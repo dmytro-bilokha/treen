@@ -168,7 +168,7 @@ define([
           const targetLocation = this.findNodePlace(this.notesTree, note.id);
           if (targetLocation.enclosingArray().length === 1 && note.parentId) {
             //If we are removing the last child, we should set enclosing array to null for tree component to change the icon
-            const parentLocation = this.findNodePlace(this.notesTree, createdNote.parentId);
+            const parentLocation = this.findNodePlace(this.notesTree, note.parentId);
             const parentNote = parentLocation.enclosingArray()[parentLocation.index];
             const updatedParent = {
               id: parentNote.id,
