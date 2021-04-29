@@ -25,19 +25,18 @@
       <div class="oj-web-applayout-max-width oj-flex-bar oj-sm-align-items-center">
         <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
           <img src="css/images/favicon.ico" alt="Treen logo" width="24" height="24">
-          <h1 class="oj-sm-only-hide oj-web-applayout-header-title" title="Application Name">
+          <h1 class="oj-web-applayout-header-title" title="Application Name">
             Treen
           </h1>
         </div>
         <div class="oj-flex-bar-end">
           <oj-bind-if test="[[userLogin() !== '']]">
             <oj-toolbar>
-              <oj-menu-button id="userMenu" display="[[smScreen() ? 'icons' : 'all']]" chroming="borderless">
+              <oj-menu-button id="userMenu" display="all" chroming="borderless">
                 <span>
                   <oj-bind-text value="[[userLogin]]"></oj-bind-text>
                 </span>
-                <span slot="endIcon"
-                  :class="[[{'oj-icon oj-icon': smScreen(), 'oj-component-icon oj-button-menu-dropdown-icon': !smScreen()}]]"></span>
+                <span slot="endIcon" class="oj-component-icon oj-button-menu-dropdown-icon"></span>
                 <oj-menu id="menu1" slot="menu" on-oj-menu-action="[[userMenuAction]]">
                   <oj-option id="reload-notebook" value="reload">Reload Notebook</oj-option>
                   <oj-option id="out" value="logout">Sign Out</oj-option>
