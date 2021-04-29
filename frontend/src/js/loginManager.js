@@ -1,14 +1,15 @@
 define([
-  'knockout'
+  'knockout',
+  'appConstants'
 ],
-  function (ko) {
+  function (ko, appConstants) {
     'use strict';
 
     class LoginManager {
 
       login(login, password, rememberMe) {
         return $.ajax({
-          url: '/auth/login',
+          url: `${appConstants.CONTEXT_PATH}/auth/login`,
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({ login: login, password: password, rememberMe: rememberMe})
@@ -21,7 +22,7 @@ define([
 
       logout() {
         return $.ajax({
-          url: '/auth/logout',
+          url: `${appConstants.CONTEXT_PATH}/auth/logout`,
         }).done(() => {
           this.userLogin('');
         });
@@ -29,7 +30,7 @@ define([
 
       init() {
         $.ajax({
-          url: '/api/user',
+          url: `${appConstants.CONTEXT_PATH}/api/user`,
         }).done((data) => {
           this.userLogin(data.login);
         }).fail(() => {

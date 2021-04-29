@@ -39,12 +39,8 @@ module.exports = function (configObj) {
       res.header('Access-Control-Allow-Origin', '*');
       next();
     });
-    app.all(/^\/api\/.*$/, (req, res) => {
-      const url = `http://localhost:8080/treen${req.url}`;
-      req.pipe(request(url)).pipe(res);
-    });
-    app.all(/^\/auth\/.*$/, (req, res) => {
-      const url = `http://localhost:8080/treen${req.url}`;
+    app.all(/^\/treen\/.*$/, (req, res) => {
+      const url = `http://localhost:8080${req.url}`;
       req.pipe(request(url)).pipe(res);
     });
     configObj['express'] = app;

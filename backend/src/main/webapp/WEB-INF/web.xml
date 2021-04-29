@@ -6,6 +6,10 @@
 
   <display-name>Treen</display-name>
 
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
   <resource-ref>
     <description>TreenDB Connection</description>
     <res-ref-name>jdbc/TreenDB</res-ref-name>

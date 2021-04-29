@@ -1,7 +1,8 @@
 define([
-  'knockout'
+  'knockout',
+  'appConstants'
 ],
-  function (ko, loginManager) {
+  function (ko, appConstants) {
     'use strict';
 
     class NotebookManager {
@@ -43,7 +44,7 @@ define([
 
       init() {
         return $.ajax({
-          url: '/api/notebook',
+          url: `${appConstants.CONTEXT_PATH}/api/notebook`,
         }).done((notebook) => {
           this.notebookVersion = notebook.version;
           this.notesTree(this.buildNestedObservable(notebook.notes)());
@@ -65,7 +66,7 @@ define([
 
       updateNote(note) {
         return $.ajax({
-          url: '/api/notebook/note',
+          url: `${appConstants.CONTEXT_PATH}/api/notebook/note`,
           type: 'PUT',
           contentType: 'application/json',
           data: JSON.stringify({
@@ -96,7 +97,7 @@ define([
 
       createNote(note) {
         return $.ajax({
-          url: '/api/notebook/note',
+          url: `${appConstants.CONTEXT_PATH}/api/notebook/note`,
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({
@@ -157,7 +158,7 @@ define([
 
       deleteNote(note) {
         return $.ajax({
-          url: '/api/notebook/note',
+          url: `${appConstants.CONTEXT_PATH}/api/notebook/note`,
           type: 'DELETE',
           contentType: 'application/json',
           data: JSON.stringify({
