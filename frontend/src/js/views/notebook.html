@@ -47,16 +47,15 @@
         <oj-text-area class="oj-form-control-max-width-md" value="{{currentDescription}}" label-hint="description"
           rows="4">
         </oj-text-area>
-        <div>
-          <oj-button id="note-submit" chroming="callToAction" on-oj-action="[[submitAction]]"
-            disabled="[[inputDisabled]]">
-            Submit
-          </oj-button>
-          <oj-button id="note-close" on-oj-action="[[closeNoteDialog]]" disabled="[[inputDisabled]]">
-            Close
-          </oj-button>
-        </div>
       </oj-form-layout>
+    </div>
+    <div slot="footer">
+      <oj-button id="note-submit" chroming="callToAction" on-oj-action="[[submitAction]]" disabled="[[inputDisabled]]">
+        Submit
+      </oj-button>
+      <oj-button id="note-close" on-oj-action="[[closeNoteDialog]]" disabled="[[inputDisabled]]">
+        Close
+      </oj-button>
     </div>
   </oj-dialog>
   <oj-dialog id="delete-dialog" dialog-title="Warning" cancel-behavior="icon" drag-affordance="title-bar">
