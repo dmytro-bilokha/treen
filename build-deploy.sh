@@ -41,9 +41,11 @@ if [ $# -eq 0 ]; then
     echo "---- UNDEPLOYING THE WEBAPP ----"
     curl -f -u "${TOMEE_USER}:${TOMEE_PASS}" "http://localhost:8080/manager/text/undeploy?path=/${app_name}" ||\
         throw_error "FAILED TO UNDEPLOY THE WEBAPP"
+    echo "---- SUCCESS ----"
 fi
 
 echo "---- DEPLOYING THE WEBAPP ----"
 curl -f -u "${TOMEE_USER}:${TOMEE_PASS}" "http://localhost:8080/manager/text/deploy?path=/${app_name}&war=file:${build_dir}/" ||\
     throw_error "FAILED TO DEPLOY THE WEBAPP"
+echo "---- SUCCESS ----"
 
