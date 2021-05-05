@@ -15,7 +15,7 @@ CREATE TABLE note
 , title VARCHAR(150)
 , link VARCHAR(256)
 , description VARCHAR(2000)
-, CONSTRAINT notes_pk PRIMARY KEY (id)
-, CONSTRAINT notes_parent_id_fk FOREIGN KEY (parent_id) REFERENCES notes (id) ON DELETE CASCADE
-, CONSTRAINT notes_user_id_fk FOREIGN KEY (user_id) REFERENCES user_data (id)
+, CONSTRAINT note_pk PRIMARY KEY (id)
+, CONSTRAINT note_parent_id_fk FOREIGN KEY (parent_id) REFERENCES note (id) ON DELETE CASCADE
+, CONSTRAINT note_user_id_fk FOREIGN KEY (user_id) REFERENCES user_data (id)
 );
