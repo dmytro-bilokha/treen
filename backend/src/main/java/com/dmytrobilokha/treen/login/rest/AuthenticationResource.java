@@ -2,6 +2,7 @@ package com.dmytrobilokha.treen.login.rest;
 
 import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
 import com.dmytrobilokha.treen.infra.exception.InvalidInputException;
+import com.dmytrobilokha.treen.infra.rest.ExceptionResponse;
 import com.dmytrobilokha.treen.login.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,9 @@ public class AuthenticationResource {
             return Response.ok().build();
         }
         LOG.warn("Failed to login using {}", loginRequest);
-        return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(new ExceptionResponse("Login/password pair is wrong"))
+                .build();
     }
 
     @GET
