@@ -139,7 +139,10 @@ define([
             enclosingArray = parentNote.children;
           }
           enclosingArray.push(createdNote);
-          this.sortNotesArray(enclosingArray);
+          //This is the ugly workaround for a tree view component, because there are rendering issues in case of sorting small arrays of children
+          if (enclosingArray().length > 2) {
+            this.sortNotesArray(enclosingArray);
+          }
           this.notebookVersion++;
         });
       }
