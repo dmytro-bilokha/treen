@@ -90,7 +90,7 @@ define([
           if (targetNode.children) {
             updatedNode.children = ko.observableArray(targetNode.children());
           }
-          this.replaceNote(targetLocation, updatedNode);
+          this.replaceNote(targetLocation, updatedNode, true);
           this.notebookVersion++;
         });
       }
@@ -123,20 +123,20 @@ define([
             //Creating nested note
             const parentLocation = this.findNodePlace(this.notesTree, createdNote.parentId);
             const parentNote = parentLocation.enclosingArray()[parentLocation.index];
-            if (parentNote.children) {
-              enclosingArray = parentNote.children;
-            } else {
-              enclosingArray = ko.observableArray();
+            if (!parentNote.children) {
               const updatedParent = {
                 id: parentNote.id,
                 parentId: parentNote.parentId,
                 title: parentNote.title,
                 link: parentNote.link,
                 description: parentNote.description,
-                children: enclosingArray
+                children: ko.observableArray([createdNote])
               };
-              this.replaceNote(parentLocation, updatedParent);
+              this.replaceNote(parentLocation, updatedParent, false);
+              this.notebookVersion++;
+              return;
             }
+            enclosingArray = parentNote.children;
           }
           enclosingArray.push(createdNote);
           this.sortNotesArray(enclosingArray);
@@ -144,7 +144,7 @@ define([
         });
       }
 
-      replaceNote(targetLocation, updatedNode) {
+      replaceNote(targetLocation, updatedNode, shouldSort) {
         if (targetLocation.enclosingArray().length === 1) {
           //If the array has only one element, we don't simply replace it, but add new - remove old to avoid parent node to shrink
           targetLocation.enclosingArray.push(updatedNode);
@@ -152,7 +152,9 @@ define([
         } else {
           targetLocation.enclosingArray.splice(targetLocation.index, 1, updatedNode);
           //For arrays bigger than 1 element, update could affect sorting order, so we need to sort the array
-          this.sortNotesArray(targetLocation.enclosingArray);
+          if (shouldSort) {
+            this.sortNotesArray(targetLocation.enclosingArray);
+          }
         }
       }
 
@@ -178,7 +180,7 @@ define([
               link: parentNote.link,
               description: parentNote.description,
             };
-            this.replaceNote(parentLocation, updatedParent);
+            this.replaceNote(parentLocation, updatedParent, false);
           } else {
             targetLocation.enclosingArray.splice(targetLocation.index, 1);
             this.sortNotesArray(targetLocation.enclosingArray);
