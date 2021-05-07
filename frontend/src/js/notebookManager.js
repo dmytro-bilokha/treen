@@ -90,7 +90,8 @@ define([
           if (targetNode.children) {
             updatedNode.children = ko.observableArray(targetNode.children());
           }
-          this.replaceNote(targetLocation, updatedNode, true);
+          targetLocation.enclosingArray.splice(targetLocation.index, 1);
+          this.insertNoteOrdered(targetLocation.enclosingArray, updatedNode);
           this.notebookVersion++;
         });
       }
@@ -132,33 +133,54 @@ define([
                 description: parentNote.description,
                 children: ko.observableArray([createdNote])
               };
-              this.replaceNote(parentLocation, updatedParent, false);
+              this.replaceNote(parentLocation, updatedParent);
               this.notebookVersion++;
               return;
             }
             enclosingArray = parentNote.children;
           }
-          enclosingArray.push(createdNote);
-          //This is the ugly workaround for a tree view component, because there are rendering issues in case of sorting small arrays of children
-          if (enclosingArray().length > 2) {
-            this.sortNotesArray(enclosingArray);
-          }
+          this.insertNoteOrdered(enclosingArray, createdNote);
           this.notebookVersion++;
         });
       }
 
-      replaceNote(targetLocation, updatedNode, shouldSort) {
+      replaceNote(targetLocation, updatedNode) {
         if (targetLocation.enclosingArray().length === 1) {
           //If the array has only one element, we don't simply replace it, but add new - remove old to avoid parent node to shrink
           targetLocation.enclosingArray.push(updatedNode);
           targetLocation.enclosingArray.shift();
         } else {
           targetLocation.enclosingArray.splice(targetLocation.index, 1, updatedNode);
-          //For arrays bigger than 1 element, update could affect sorting order, so we need to sort the array
-          if (shouldSort) {
-            this.sortNotesArray(targetLocation.enclosingArray);
+        }
+      }
+
+      insertNoteOrdered(observableOrderedArray, note) {
+        const innerArray = observableOrderedArray();
+        if (innerArray.length === 0 || this.compareNotes(innerArray[innerArray.length - 1], note) <= 0) {
+          observableOrderedArray.push(note);
+          return;
+        }
+        if (this.compareNotes(innerArray[0], note) > 0) {
+          observableOrderedArray.unshift(note);
+          return;
+        }
+        let startIndex = 0;
+        let endIndex = innerArray.length - 1;
+        while (endIndex - startIndex > 1) {
+          const midIndex = (startIndex + endIndex) >>> 1;
+          const cmp = this.compareNotes(innerArray[midIndex], note);
+          if (cmp === 0) {
+            //This should never happen, because we don't insert the same note into array already having it
+            observableOrderedArray.splice(midIndex, 0, note);
+            return;
+          }
+          if (cmp > 0) {
+            endIndex = midIndex;
+          } else {
+            startIndex = midIndex;
           }
         }
+        observableOrderedArray.splice(endIndex, 0, note);
       }
 
       deleteNote(note) {
@@ -183,33 +205,34 @@ define([
               link: parentNote.link,
               description: parentNote.description,
             };
-            this.replaceNote(parentLocation, updatedParent, false);
+            this.replaceNote(parentLocation, updatedParent);
           } else {
             targetLocation.enclosingArray.splice(targetLocation.index, 1);
-            this.sortNotesArray(targetLocation.enclosingArray);
           }
           this.notebookVersion++;
         });
       }
 
       sortNotesArray(notesArray) {
-        notesArray.sort((left, right) => {
-          const leftString = this.getNodeSortingString(left);
-          const rightString = this.getNodeSortingString(right);
-          if (leftString < rightString) {
-            return -1;
-          }
-          if (leftString > rightString) {
-            return 1;
-          }
-          if (left.id < right.id) {
-            return -1;
-          }
-          if (left.id > right.id) {
-            return 1;
-          }
-          return 0;
-        });
+        notesArray.sort(this.compareNotes);
+      }
+
+      compareNotes(left, right) {
+        const leftString = this.getNodeSortingString(left);
+        const rightString = this.getNodeSortingString(right);
+        if (leftString < rightString) {
+          return -1;
+        }
+        if (leftString > rightString) {
+          return 1;
+        }
+        if (left.id < right.id) {
+          return -1;
+        }
+        if (left.id > right.id) {
+          return 1;
+        }
+        return 0;
       }
 
       constructor() {
