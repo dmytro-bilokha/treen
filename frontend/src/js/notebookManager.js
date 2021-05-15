@@ -8,7 +8,9 @@ define([
     class NotebookManager {
 
       buildNestedObservable(data) {
-        return ko.observableArray(data.map((node) => {
+        //I want this method to work both for regular arrays and knockout observable arrays
+        const dataArray = typeof data.map === 'function' ? data : data();
+        return ko.observableArray(dataArray.map((node) => {
           const newNode = {
             id: node.id,
             parentId: node.parentId,
@@ -88,7 +90,7 @@ define([
             description: note.description,
           };
           if (targetNode.children) {
-            updatedNode.children = ko.observableArray(targetNode.children());
+            updatedNode.children = this.buildNestedObservable(targetNode.children);
           }
           targetLocation.enclosingArray.splice(targetLocation.index, 1);
           this.insertNoteOrdered(targetLocation.enclosingArray, updatedNode);
