@@ -23,14 +23,18 @@ define([
         this.titleErrors = ko.observableArray();
         this.linkErrors = ko.observableArray();
 
-        this.openNoteDialog = (e, d, con) => {
-          this.currentId(d.data.id);
-          this.currentParentId(d.data.parentId);
-          this.currentTitle(d.data.title);
-          this.currentLink(d.data.link);
-          this.currentDescription(d.data.description);
-          document.getElementById('note-dialog').open();
+        this.openNoteAction = (e, d, con) => {
+          this.openNoteDialog(d.data);
           return true;
+        };
+
+        this.openNoteDialog = (note) => {
+          this.currentId(note.id);
+          this.currentParentId(note.parentId);
+          this.currentTitle(note.title);
+          this.currentLink(note.link);
+          this.currentDescription(note.description);
+          document.getElementById('note-dialog').open();
         };
 
         this.isFormValid = () => {
@@ -79,7 +83,13 @@ define([
           const target = event.detail.originalEvent.target;
           const treeView = document.getElementById("treeview");
           const context = treeView.getContextByNode(target);
-          this.currentMenuKey = context ? context.key : treeView.currentItem;
+          this.currentMenuNote = context ? {
+            id: context.data.id,
+            parentId: context.data.parentId,
+            title: context.data.title,
+            link: context.data.link,
+            description: context.data.description
+          } : null;
         };
 
         this.openNewNoteDialog = (parentId) => {
@@ -93,35 +103,31 @@ define([
 
         this.menuAction = (event) => {
           const actionCode = event.target.value;
-          this.notesProvider
-            .fetchByKeys({ keys: new Set([this.currentMenuKey]) })
-            .then((e) => {
-              const actionTarget = e.results.get(this.currentMenuKey);
-              if (actionTarget) {
-                switch (actionCode) {
-                  case 'edit':
-                    this.openNoteDialog(null, actionTarget);
-                    break;
+          const actionNote = this.currentMenuNote;
+          if (actionNote) {
+            switch (actionCode) {
+              case 'edit':
+                this.openNoteDialog(actionNote);
+                break;
 
-                  case 'addChild':
-                    this.openNewNoteDialog(actionTarget.data.id);
-                    break;
+              case 'addChild':
+                this.openNewNoteDialog(actionNote.id);
+                break;
 
-                  case 'addSibling':
-                    this.openNewNoteDialog(actionTarget.data.parentId);
-                    break;
+              case 'addSibling':
+                this.openNewNoteDialog(actionNote.parentId);
+                break;
 
-                  case 'delete':
-                    if (actionTarget.data.children) {
-                      this.openDeleteDialog(actionTarget.data);
-                    } else {
-                      notebookManager.deleteNote(actionTarget.data)
-                        .fail(this.handleServerError);
-                    }
-                    break;
+              case 'delete':
+                if (actionNote.children) {
+                  this.openDeleteDialog(actionNote);
+                } else {
+                  notebookManager.deleteNote(actionNote)
+                    .fail(this.handleServerError);
                 }
-              }
-            });
+                break;
+            }
+          }
         };
 
         this.openDeleteDialog = (note) => {

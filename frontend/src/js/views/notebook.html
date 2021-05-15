@@ -14,7 +14,7 @@
       <oj-option id="node-edit" value="edit">Edit</oj-option>
     </oj-menu>
     <template slot="itemTemplate" data-oj-as="row">
-      <span class="oj-treeview-item-icon" on-click="[[openNoteDialog]]"></span>
+      <span class="oj-treeview-item-icon" on-click="[[openNoteAction]]"></span>
       <span class="oj-treeview-item-text">
         <oj-bind-if test="[[row.data.link !== undefined && row.data.link !== null 
                             && row.data.title !== undefined && row.data.title !== null]]">
