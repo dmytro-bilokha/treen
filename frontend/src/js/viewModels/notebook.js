@@ -5,15 +5,17 @@ define([
   'ojs/ojarraytreedataprovider',
   'notebookManager',
   'notificationManager',
+  'appUtils',
   'loginManager',
   'ojs/ojknockout',
 ],
-  function (require, exports, ko, ArrayTreeDataProvider, notebookManager, notificationManager, loginManager) {
+  function (require, exports, ko, ArrayTreeDataProvider, notebookManager, notificationManager, AppUtils, loginManager) {
     'use strict';
 
     class NotebookModel {
 
       constructor() {
+        this.AppUtils = AppUtils;
         this.currentId = ko.observable();
         this.currentParentId = ko.observable();
         this.currentTitle = ko.observable('');
@@ -38,8 +40,8 @@ define([
         };
 
         this.isFormValid = () => {
-          return this.currentTitle() !== undefined && this.currentTitle() !== null && this.currentTitle() !== ''
-            || this.currentLink() !== undefined && this.currentLink() !== null && this.currentLink() !== '';
+          return AppUtils.isStringNotBlank(this.currentTitle())
+            || AppUtils.isStringNotBlank(this.currentLink());
         }
 
         this.submitAction = () => {
@@ -55,9 +57,9 @@ define([
           const noteData = {
             id: this.currentId(),
             parentId: this.currentParentId(),
-            title: this.currentTitle() === undefined ? null : this.currentTitle(),
-            link: this.currentLink() === undefined ? null : this.currentLink(),
-            description: this.currentDescription() === undefined ? null : this.currentDescription(),
+            title: AppUtils.isStringBlank(this.currentTitle()) ? null : this.currentTitle(),
+            link: AppUtils.isStringBlank(this.currentLink()) ? null : this.currentLink(),
+            description: AppUtils.isStringBlank(this.currentDescription()) ? null : this.currentDescription(),
           };
           const notebookAction = noteData.id ? notebookManager.updateNote(noteData) : notebookManager.createNote(noteData);
           notebookAction

@@ -16,18 +16,18 @@
     <template slot="itemTemplate" data-oj-as="row">
       <span class="oj-treeview-item-icon" on-click="[[openNoteAction]]"></span>
       <span class="oj-treeview-item-text">
-        <oj-bind-if test="[[row.data.link !== undefined && row.data.link !== null 
-                            && row.data.title !== undefined && row.data.title !== null]]">
+        <oj-bind-if test="[[AppUtils.isStringNotBlank(row.data.link)
+                            && AppUtils.isStringNotBlank(row.data.title)]]">
           <a referrerpolicy="no-referrer" target="_blank" :href="[[row.data.link]]">
             <oj-bind-text value="[[row.data.title]]"></oj-bind-text>
           </a>
         </oj-bind-if>
-        <oj-bind-if test="[[(row.data.link === undefined || row.data.link === null) 
-                            && row.data.title !== undefined && row.data.title !== null]]">
+        <oj-bind-if test="[[AppUtils.isStringBlank(row.data.link) 
+                            && AppUtils.isStringNotBlank(row.data.title)]]">
           <oj-bind-text value="[[row.data.title]]"></oj-bind-text>
         </oj-bind-if>
-        <oj-bind-if test="[[row.data.link !== undefined && row.data.link !== null 
-                            && (row.data.title === undefined || row.data.title === null)]]">
+        <oj-bind-if test="[[AppUtils.isStringNotBlank(row.data.link) 
+                            && AppUtils.isStringBlank(row.data.title)]]">
           <a referrerpolicy="no-referrer" target="_blank" :href="[[row.data.link]]">
             <oj-bind-text value="[[row.data.link]]"></oj-bind-text>
           </a>

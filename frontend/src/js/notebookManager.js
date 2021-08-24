@@ -1,8 +1,9 @@
 define([
   'knockout',
-  'appConstants'
+  'appConstants',
+  'appUtils'
 ],
-  function (ko, appConstants) {
+  function (ko, AppConstants, AppUtils) {
     'use strict';
 
     class NotebookManager {
@@ -46,7 +47,7 @@ define([
 
       init() {
         return $.ajax({
-          url: `${appConstants.CONTEXT_PATH}/api/notebook`,
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook`,
         }).done((notebook) => {
           this.notebookVersion = notebook.version;
           this.notesTree(this.buildNestedObservable(notebook.notes)());
@@ -54,13 +55,13 @@ define([
       }
 
       getNodeSortingString(node) {
-        if (node.title !== undefined && node.title !== null) {
+        if (AppUtils.isStringNotBlank(node.title)) {
           return node.title;
         }
-        if (node.link !== undefined && node.link !== null) {
+        if (AppUtils.isStringNotBlank(node.link)) {
           return node.link;
         }
-        if (node.description !== undefined && node.description !== null) {
+        if (AppUtils.isStringNotBlank(node.description)) {
           return node.description;
         }
         return '';
@@ -68,7 +69,7 @@ define([
 
       updateNote(note) {
         return $.ajax({
-          url: `${appConstants.CONTEXT_PATH}/api/notebook/note`,
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
           type: 'PUT',
           contentType: 'application/json',
           data: JSON.stringify({
@@ -100,7 +101,7 @@ define([
 
       createNote(note) {
         return $.ajax({
-          url: `${appConstants.CONTEXT_PATH}/api/notebook/note`,
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({
@@ -187,7 +188,7 @@ define([
 
       deleteNote(note) {
         return $.ajax({
-          url: `${appConstants.CONTEXT_PATH}/api/notebook/note`,
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
           type: 'DELETE',
           contentType: 'application/json',
           data: JSON.stringify({
