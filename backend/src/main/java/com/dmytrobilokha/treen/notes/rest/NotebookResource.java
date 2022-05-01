@@ -3,8 +3,6 @@ package com.dmytrobilokha.treen.notes.rest;
 import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
 import com.dmytrobilokha.treen.infra.exception.InvalidInputException;
 import com.dmytrobilokha.treen.login.rest.UserSessionData;
-import com.dmytrobilokha.treen.notes.persistence.NewNote;
-import com.dmytrobilokha.treen.notes.persistence.Note;
 import com.dmytrobilokha.treen.notes.service.NotebookService;
 
 import javax.enterprise.context.RequestScoped;
@@ -25,6 +23,7 @@ public class NotebookResource {
 
     private NotebookService notebookService;
     private NoteRequestValidator requestValidator;
+    private NoteRequestConvertor requestConvertor;
     private UserSessionData userSessionData;
 
     public NotebookResource() {
@@ -33,9 +32,13 @@ public class NotebookResource {
 
     @Inject
     public NotebookResource(
-            NotebookService notebookService, NoteRequestValidator requestValidator, UserSessionData userSessionData) {
+            NotebookService notebookService,
+            NoteRequestValidator requestValidator,
+            NoteRequestConvertor requestConvertor,
+            UserSessionData userSessionData) {
         this.notebookService = notebookService;
         this.requestValidator = requestValidator;
+        this.requestConvertor = requestConvertor;
         this.userSessionData = userSessionData;
     }
 
@@ -49,19 +52,10 @@ public class NotebookResource {
     @Path("note")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateNote(UpdateNoteRequest request) throws InternalApplicationException, InvalidInputException {
+    public NoteDto updateNote(UpdateNoteRequest request) throws InternalApplicationException, InvalidInputException {
         requestValidator.validateUpdate(request);
-        var noteNode = new Note(
-                request.getId(),
-                request.getParentId(),
-                userSessionData.getAuthenticatedUserId(),
-                request.getTitle(),
-                request.getLink(),
-                request.getDescription(),
-                request.getVersion()
-        );
-        notebookService.updateNote(noteNode);
-        return Response.ok().build();
+        var note = requestConvertor.convertUpdateRequest(request);
+        return notebookService.updateNote(note);
     }
 
     @POST
@@ -70,15 +64,8 @@ public class NotebookResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public NoteDto createNote(CreateNoteRequest request) throws InternalApplicationException, InvalidInputException {
         requestValidator.validateCreation(request);
-        var noteNode = new NewNote(
-                request.getParentId(),
-                userSessionData.getAuthenticatedUserId(),
-                request.getTitle(),
-                request.getLink(),
-                request.getDescription(),
-                request.getVersion()
-        );
-        return notebookService.createNoteNode(noteNode);
+        var note = requestConvertor.convertCreateRequest(request);
+        return notebookService.createNoteNode(note);
     }
 
     @DELETE

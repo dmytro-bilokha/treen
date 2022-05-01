@@ -5,6 +5,9 @@
 
 <module name="Checker">
 
+    <!-- Allow suppressing warnings with annotations -->
+    <module name="SuppressWarningsFilter"/>
+
     <module name="BeforeExecutionExclusionFileFilter">
         <property name="fileNamePattern" value="module\-info\.java$"/>
     </module>
@@ -37,6 +40,9 @@
     <module name="UniqueProperties"/>
 
     <module name="TreeWalker">
+
+        <!-- Allow suppressing warnings with annotations -->
+        <module name="SuppressWarningsHolder"/>
 
         <!-- Star imports could lead to a lot of pain to investigate the issue -->
         <module name="AvoidStarImport"/>

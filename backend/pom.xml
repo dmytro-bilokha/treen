@@ -206,6 +206,16 @@
                     <path>/treen</path>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-test.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <threadCount>1</threadCount>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>

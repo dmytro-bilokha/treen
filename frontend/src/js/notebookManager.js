@@ -80,15 +80,15 @@ define([
             description: note.description,
             version: this.notebookVersion
           })
-        }).done(() => {
+        }).done((noteResponse) => {
           const targetLocation = this.findNodePlace(this.notesTree, note.id);
           const targetNode = targetLocation.enclosingArray()[targetLocation.index];
           const updatedNode = {
-            id: targetNode.id,
-            parentId: note.parentId,
-            title: note.title,
-            link: note.link,
-            description: note.description,
+            id: noteResponse.id,
+            parentId: noteResponse.parentId,
+            title: noteResponse.title,
+            link: noteResponse.link,
+            description: noteResponse.description,
           };
           if (targetNode.children) {
             updatedNode.children = this.buildNestedObservable(targetNode.children);

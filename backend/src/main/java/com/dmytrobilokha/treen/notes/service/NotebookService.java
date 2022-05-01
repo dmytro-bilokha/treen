@@ -92,7 +92,7 @@ public class NotebookService {
         return noteDto;
     }
 
-    public void updateNote(Note note) throws InternalApplicationException, OptimisticLockException {
+    public NoteDto updateNote(Note note) throws InternalApplicationException, OptimisticLockException {
         int count;
         try {
             count = noteRepository.updateNote(note);
@@ -102,6 +102,7 @@ public class NotebookService {
         if (count == 0) {
             throw new OptimisticLockException("Unable to update, your note is outdated");
         }
+        return convertToDto(note);
     }
 
     public NoteDto createNoteNode(
@@ -120,13 +121,7 @@ public class NotebookService {
             throw new OptimisticLockException("Unable to create a new note, your notebook is outdated");
         }
         incrementNotebookVersion(note.getUserId(), note.getVersion());
-        var noteDto = new NoteDto();
-        noteDto.setId(id);
-        noteDto.setParentId(note.getParentId());
-        noteDto.setTitle(note.getTitle());
-        noteDto.setLink(note.getLink());
-        noteDto.setDescription(note.getDescription());
-        return noteDto;
+        return convertToDto(new Note(note, id));
     }
 
     public void removeNoteWithChildren(long noteId,
