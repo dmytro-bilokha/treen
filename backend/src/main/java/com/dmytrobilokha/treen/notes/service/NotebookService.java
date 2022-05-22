@@ -7,6 +7,7 @@ import com.dmytrobilokha.treen.notes.persistence.NewNote;
 import com.dmytrobilokha.treen.notes.persistence.Note;
 import com.dmytrobilokha.treen.notes.persistence.NoteRepository;
 import com.dmytrobilokha.treen.notes.rest.NoteDto;
+import com.dmytrobilokha.treen.notes.rest.NoteFlag;
 import com.dmytrobilokha.treen.notes.rest.NotebookDto;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -88,8 +89,19 @@ public class NotebookService {
         noteDto.setParentId(note.getParentId());
         noteDto.setTitle(note.getTitle());
         noteDto.setLink(note.getLink());
+        noteDto.setFlags(convertFlags(note.getFlags()));
         noteDto.setDescription(note.getDescription());
         return noteDto;
+    }
+
+    private List<NoteFlag> convertFlags(long flags) {
+        var result = new ArrayList<NoteFlag>();
+        for (var flag : NoteFlag.values()) {
+            if ((flags & (1L << flag.getBitPosition())) != 0) {
+                result.add(flag);
+            }
+        }
+        return result;
     }
 
     public NoteDto updateNote(Note note) throws InternalApplicationException, OptimisticLockException {

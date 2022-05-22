@@ -12,9 +12,10 @@ public class Note extends NewNote {
             long userId,
             @CheckForNull String title,
             @CheckForNull String link,
+            long flags,
             @CheckForNull String description,
             long version) {
-        super(parentId, userId, title, link, description, version);
+        super(parentId, userId, title, link, flags, description, version);
         this.id = id;
     }
 
@@ -35,6 +36,7 @@ public class Note extends NewNote {
                 + ", userId=" + userId
                 + ", title='" + title + '\''
                 + ", link='" + link + '\''
+                + ", flags=" + Long.toBinaryString(flags)
                 + ", description='" + description + '\''
                 + ", version=" + version
                 + '}';

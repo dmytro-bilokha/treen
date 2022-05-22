@@ -8,8 +8,8 @@ import java.sql.SQLException;
 public class InsertRootNoteQuery implements UpsertQuery {
 
     private static final String QUERY =
-            "INSERT INTO note (parent_id, user_id, title, link, description)"
-                    + " SELECT NULL, ud.id, ?, ?, ?"
+            "INSERT INTO note (parent_id, user_id, title, link, flags, description)"
+                    + " SELECT NULL, ud.id, ?, ?, ?, ?"
                     + " FROM user_data ud WHERE ud.id=? AND notebook_version=?";
 
     private final NewNote note;
@@ -27,9 +27,10 @@ public class InsertRootNoteQuery implements UpsertQuery {
     public void setParameters(PreparedStatement statement) throws SQLException {
         statement.setString(1, note.getTitle());
         statement.setString(2, note.getLink());
-        statement.setString(3, note.getDescription());
-        statement.setLong(4, note.getUserId());
-        statement.setLong(5, note.getVersion());
+        statement.setLong(3, note.getFlags());
+        statement.setString(4, note.getDescription());
+        statement.setLong(5, note.getUserId());
+        statement.setLong(6, note.getVersion());
     }
 
 }

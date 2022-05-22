@@ -14,6 +14,7 @@ public class NoteDto implements Comparable<NoteDto> {
     private String link;
     @CheckForNull
     private String description;
+    private List<NoteFlag> flags;
     @CheckForNull
     private List<NoteDto> children;
 
@@ -82,6 +83,14 @@ public class NoteDto implements Comparable<NoteDto> {
 
     public void setDescription(@CheckForNull String description) {
         this.description = description;
+    }
+
+    public List<NoteFlag> getFlags() {
+        return flags;
+    }
+
+    public void setFlags(List<NoteFlag> flags) {
+        this.flags = flags;
     }
 
     @CheckForNull

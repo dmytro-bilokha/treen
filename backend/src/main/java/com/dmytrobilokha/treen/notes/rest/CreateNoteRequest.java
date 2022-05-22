@@ -1,6 +1,7 @@
 package com.dmytrobilokha.treen.notes.rest;
 
 import javax.annotation.CheckForNull;
+import java.util.List;
 
 public class CreateNoteRequest {
 
@@ -10,6 +11,8 @@ public class CreateNoteRequest {
     private String title;
     @CheckForNull
     private String link;
+    @CheckForNull
+    private List<NoteFlag> flags;
     @CheckForNull
     private String description;
     private long version;
@@ -39,6 +42,15 @@ public class CreateNoteRequest {
 
     public void setLink(@CheckForNull String link) {
         this.link = link;
+    }
+
+    @CheckForNull
+    public List<NoteFlag> getFlags() {
+        return flags;
+    }
+
+    public void setFlags(@CheckForNull List<NoteFlag> flags) {
+        this.flags = flags;
     }
 
     @CheckForNull

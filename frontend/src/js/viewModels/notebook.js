@@ -20,6 +20,7 @@ define([
         this.currentParentId = ko.observable();
         this.currentTitle = ko.observable('');
         this.currentLink = ko.observable('');
+        this.currentFlags = ko.observableArray([]);
         this.currentDescription = ko.observable('');
         this.inputDisabled = ko.observable(false);
         this.titleErrors = ko.observableArray();
@@ -35,6 +36,7 @@ define([
           this.currentParentId(note.parentId);
           this.currentTitle(note.title);
           this.currentLink(note.link);
+          this.currentFlags(note.flags);
           this.currentDescription(note.description);
           document.getElementById('note-dialog').open();
         };
@@ -59,6 +61,7 @@ define([
             parentId: this.currentParentId(),
             title: AppUtils.isStringBlank(this.currentTitle()) ? null : this.currentTitle(),
             link: AppUtils.isStringBlank(this.currentLink()) ? null : this.currentLink(),
+            flags: this.currentFlags(),
             description: AppUtils.isStringBlank(this.currentDescription()) ? null : this.currentDescription(),
           };
           const notebookAction = noteData.id ? notebookManager.updateNote(noteData) : notebookManager.createNote(noteData);
@@ -90,6 +93,7 @@ define([
             parentId: context.data.parentId,
             title: context.data.title,
             link: context.data.link,
+            flags: context.data.flags,
             description: context.data.description
           } : null;
         };
@@ -99,6 +103,7 @@ define([
           this.currentParentId(parentId);
           this.currentTitle(null);
           this.currentLink(null);
+          this.currentFlags([]);
           this.currentDescription(null);
           document.getElementById('note-dialog').open();
         };
@@ -137,6 +142,7 @@ define([
           this.currentParentId(note.parentId);
           this.currentTitle(note.title);
           this.currentLink(note.link);
+          this.currentFlags(note.flags);
           this.currentDescription(note.description);
           document.getElementById('delete-dialog').open();
           return true;
@@ -148,6 +154,7 @@ define([
             parentId: this.currentParentId(),
             title: this.currentTitle(),
             link: this.currentLink(),
+            flags: this.currentFlags(),
             description: this.currentDescription(),
           })
           .fail(this.handleServerError)

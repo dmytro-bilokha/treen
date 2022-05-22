@@ -11,6 +11,7 @@ public class NewNote {
     protected final String title;
     @CheckForNull
     protected final String link;
+    protected final long flags;
     @CheckForNull
     protected final String description;
     protected final long version;
@@ -20,12 +21,14 @@ public class NewNote {
             long userId,
             @CheckForNull String title,
             @CheckForNull String link,
+            long flags,
             @CheckForNull String description,
             long version) {
         this.parentId = parentId;
         this.userId = userId;
         this.title = title;
         this.link = link;
+        this.flags = flags;
         this.description = description;
         this.version = version;
     }
@@ -35,6 +38,7 @@ public class NewNote {
         this.userId = original.userId;
         this.title = original.title;
         this.link = original.link;
+        this.flags = original.flags;
         this.description = original.description;
         this.version = original.version;
     }
@@ -63,6 +67,10 @@ public class NewNote {
         return description;
     }
 
+    public long getFlags() {
+        return flags;
+    }
+
     public long getVersion() {
         return version;
     }
@@ -74,6 +82,7 @@ public class NewNote {
                 + ", userId=" + userId
                 + ", title='" + title + '\''
                 + ", link='" + link + '\''
+                + ", flags=" + Long.toBinaryString(flags)
                 + ", description='" + description + '\''
                 + '}';
     }

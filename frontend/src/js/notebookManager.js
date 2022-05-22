@@ -17,6 +17,7 @@ define([
             parentId: node.parentId,
             title: node.title,
             link: node.link,
+            flags: node.flags,
             description: node.description,
           };
           if (node.children) {
@@ -77,6 +78,7 @@ define([
             parentId: note.parentId,
             title: note.title,
             link: note.link,
+            flags: note.flags,
             description: note.description,
             version: this.notebookVersion
           })
@@ -88,6 +90,7 @@ define([
             parentId: noteResponse.parentId,
             title: noteResponse.title,
             link: noteResponse.link,
+            flags: noteResponse.flags,
             description: noteResponse.description,
           };
           if (targetNode.children) {
@@ -108,6 +111,7 @@ define([
             parentId: note.parentId,
             title: note.title,
             link: note.link,
+            flags: note.flags,
             description: note.description,
             version: this.notebookVersion
           })
@@ -117,6 +121,7 @@ define([
             parentId: noteResponse.parentId,
             title: noteResponse.title,
             link: noteResponse.link,
+            flags: noteResponse.flags,
             description: noteResponse.description,
           };
           let enclosingArray;
@@ -133,6 +138,7 @@ define([
                 parentId: parentNote.parentId,
                 title: parentNote.title,
                 link: parentNote.link,
+                flags: parentNote.flags,
                 description: parentNote.description,
                 children: ko.observableArray([createdNote])
               };
@@ -206,6 +212,7 @@ define([
               parentId: parentNote.parentId,
               title: parentNote.title,
               link: parentNote.link,
+              flags: parentNote.flags,
               description: parentNote.description,
             };
             this.replaceNote(parentLocation, updatedParent);

@@ -15,7 +15,13 @@
     </oj-menu>
     <template slot="itemTemplate" data-oj-as="row">
       <span class="oj-treeview-item-icon" on-click="[[openNoteAction]]"></span>
-      <span class="oj-treeview-item-text">
+      <span class="oj-treeview-item-text" :style="[[row.data.flags.includes('STRIKE') ? {'text-decoration' : 'line-through'} : {}]]">
+        <oj-bind-if test="[[row.data.flags.includes('CHECK')]]">
+          <span style="color: green;">✔</span>
+        </oj-bind-if>
+        <oj-bind-if test="[[row.data.flags.includes('CROSS')]]">
+          <span style="color: red;">❌</span>
+        </oj-bind-if>
         <oj-bind-if test="[[AppUtils.isStringNotBlank(row.data.link)
                             && AppUtils.isStringNotBlank(row.data.title)]]">
           <a referrerpolicy="no-referrer" target="_blank" :href="[[row.data.link]]">
@@ -47,6 +53,11 @@
         <oj-text-area class="oj-form-control-max-width-md" value="{{currentDescription}}" label-hint="description"
           rows="5">
         </oj-text-area>
+        <oj-checkboxset id="noteCheckboxset" value="{{currentFlags}}" class="oj-choice-direction-row">
+          <oj-option value="STRIKE"><del>del</del></oj-option>
+          <oj-option value="CHECK"><span style="color: green;">✔</span></oj-option>
+          <oj-option value="CROSS"><span style="color: red;">❌</span></oj-option>
+        </oj-checkboxset>
       </oj-form-layout>
     </div>
     <div slot="footer">
