@@ -63,7 +63,7 @@ public class NoteRequestConvertor {
             return result;
         }
         for (var flag : flags) {
-            result |= (1L << flag.getBitPosition());
+            result |= 1L << flag.getBitPosition();
         }
         return result;
     }

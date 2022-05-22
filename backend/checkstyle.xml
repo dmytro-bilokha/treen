@@ -210,7 +210,9 @@
         <module name="MethodLength"/>
 
         <!-- No too many parameters -->
-        <module name="ParameterNumber"/>
+        <module name="ParameterNumber">
+            <property name="max" value="8"/>
+        </module>
 
         <!-- No space for empty -->
         <module name="EmptyForInitializerPad"/>
