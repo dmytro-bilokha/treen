@@ -25,6 +25,7 @@ define([
         this.inputDisabled = ko.observable(false);
         this.titleErrors = ko.observableArray();
         this.linkErrors = ko.observableArray();
+        this.notesLoading = ko.observable(true);
 
         this.openNoteAction = (e, d, con) => {
           this.openNoteDialog(d.data);
@@ -190,8 +191,10 @@ define([
         };
 
         this.connected = () => {
+          this.notesLoading(true);
           notebookManager.init()
-            .fail(this.handleServerError);
+            .fail(this.handleServerError)
+            .always(this.notesLoading(false));
         }
 
         this.notesProvider = new ArrayTreeDataProvider(notebookManager.notesTree);

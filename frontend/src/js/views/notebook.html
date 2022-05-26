@@ -1,9 +1,16 @@
 <div id="notebook-container">
-  <oj-bind-if test="[[notesProvider.isEmpty() === 'yes']]">
+  <oj-bind-if test="[[!notesLoading && notesProvider.isEmpty() === 'yes']]">
     <h6 class="oj-sm-margin-4x-top">
       You don't have any notes in your notebook. <span>
         <a on-click="[[createFirstNote]]">Click here</a>
       </span> to create the first note.
+    </h6>
+  </oj-bind-if>
+  <oj-bind-if test="[[notesLoading]]">
+    <h6 class="oj-sm-margin-4x-top">
+      Your notebook is loading...
+      <oj-progress-circle id="progressCircle" value="-1">
+      </oj-progress-circle>
     </h6>
   </oj-bind-if>
   <oj-tree-view id="treeview" data="[[notesProvider]]">
