@@ -26,9 +26,12 @@ define([
         this.titleErrors = ko.observableArray();
         this.linkErrors = ko.observableArray();
         this.notesLoading = ko.observable(true);
+        this.clipBoardNoteData = ko.observable();
 
         this.openNoteAction = (e, d, con) => {
-          this.openNoteDialog(d.data);
+          if (!this.isPasteMode()) {
+            this.openNoteDialog(d.data);
+          }
           return true;
         };
 
@@ -87,6 +90,7 @@ define([
 
         this.menuBeforeOpen = (event) => {
           const target = event.detail.originalEvent.target;
+          this.currentNoteElementId = event.target.id;
           const treeView = document.getElementById("treeview");
           const context = treeView.getContextByNode(target);
           this.currentMenuNote = context ? {
@@ -133,6 +137,22 @@ define([
                   notebookManager.deleteNote(actionNote)
                     .fail(this.handleServerError);
                 }
+                break;
+
+              case 'cut':
+                this.cutNote(actionNote);
+                break;
+
+              case 'cancelCut':
+                this.cleanCutNote();
+                break;
+
+              case 'pasteChild':
+                this.pasteNote(this.clipBoardNoteData(), actionNote.id);
+                break;
+
+              case 'pasteSibling':
+                this.pasteNote(this.clipBoardNoteData(), actionNote.parentId);
                 break;
             }
           }
@@ -190,11 +210,40 @@ define([
           }
         };
 
+        this.cutNote = (note) => {
+          this.clipBoardNoteData({ id: note.id, parentId: note.parentId});
+        };
+
+        this.cleanCutNote = () => {
+          this.clipBoardNoteData(null);
+        };
+
+        this.pasteNote = (noteData, parentId) => {
+          if (noteData.parentId === parentId) {
+            this.cleanCutNote();
+            return;
+          }
+          notebookManager.moveNote(noteData.id, parentId)
+            .fail(this.handleServerError)
+            .always(this.cleanCutNote);
+        };
+
         this.connected = () => {
           this.notesLoading(true);
           notebookManager.init()
             .fail(this.handleServerError)
             .always(this.notesLoading(false));
+        };
+
+        this.getNoteIconStyleClass = (noteId) => {
+          const noteData = this.clipBoardNoteData();
+          if (noteData != null && noteId === noteData.id) {
+            return "oj-text-color-disabled";
+          }
+        };
+
+        this.isPasteMode = () => {
+          return this.clipBoardNoteData() != null;
         }
 
         this.notesProvider = new ArrayTreeDataProvider(notebookManager.notesTree);

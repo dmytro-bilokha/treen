@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -79,4 +80,18 @@ public class NotebookResource {
         return Response.ok().build();
     }
 
+    @PATCH
+    @Path("note")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response moveNote(MoveNoteRequest request) throws InternalApplicationException, InvalidInputException {
+        requestValidator.validateMove(request);
+        notebookService.moveNoteWithChildren(
+                request.getId(),
+                request.getParentId(),
+                userSessionData.getAuthenticatedUserId(),
+                request.getVersion()
+        );
+        return Response.ok().build();
+    }
 }

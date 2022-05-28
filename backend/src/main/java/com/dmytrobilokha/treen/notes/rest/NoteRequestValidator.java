@@ -56,4 +56,8 @@ public class NoteRequestValidator {
         validateNotZero(request.getId(), request.getVersion());
     }
 
+    void validateMove(MoveNoteRequest request) throws InvalidInputException {
+        validateNotZero(request.getId(), request.getVersion());
+    }
+
 }

@@ -10,6 +10,7 @@ import com.dmytrobilokha.treen.notes.rest.NoteDto;
 import com.dmytrobilokha.treen.notes.rest.NoteFlag;
 import com.dmytrobilokha.treen.notes.rest.NotebookDto;
 
+import javax.annotation.CheckForNull;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -163,7 +164,26 @@ public class NotebookService {
         if (count == 0) {
             throw new OptimisticLockException("Unable to update the notebook, your version is outdated");
         }
+    }
 
+    public void moveNoteWithChildren(
+            long id,
+            @CheckForNull Long newParentId,
+            long userId,
+            long version) throws InternalApplicationException, OptimisticLockException {
+        int count;
+        try {
+            if (newParentId == null) {
+                count = noteRepository.moveNoteToRoot(id, userId, version);
+            } else {
+                count = noteRepository.moveNote(id, newParentId, userId, version);
+            }
+        } catch (DbException e) {
+            throw new InternalApplicationException("Failed to move the note", e);
+        }
+        if (count == 0) {
+            throw new OptimisticLockException("Unable to move the note, your version is outdated");
+        }
     }
 
 }

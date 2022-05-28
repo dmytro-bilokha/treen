@@ -12,19 +12,23 @@ define([
         //I want this method to work both for regular arrays and knockout observable arrays
         const dataArray = typeof data.map === 'function' ? data : data();
         return ko.observableArray(dataArray.map((node) => {
-          const newNode = {
-            id: node.id,
-            parentId: node.parentId,
-            title: node.title,
-            link: node.link,
-            flags: node.flags,
-            description: node.description,
-          };
+          const newNode = this.copyNoteIgnoringChildren(node);
           if (node.children) {
             newNode.children = this.buildNestedObservable(node.children);
           }
           return newNode;
         }));
+      }
+
+      copyNoteIgnoringChildren(note) {
+        return {
+          id: note.id,
+          parentId: note.parentId,
+          title: note.title,
+          link: note.link,
+          flags: note.flags,
+          description: note.description,
+        };
       }
 
       findNodePlace(topObservableArray, id) {
@@ -85,14 +89,7 @@ define([
         }).done((noteResponse) => {
           const targetLocation = this.findNodePlace(this.notesTree, note.id);
           const targetNode = targetLocation.enclosingArray()[targetLocation.index];
-          const updatedNode = {
-            id: noteResponse.id,
-            parentId: noteResponse.parentId,
-            title: noteResponse.title,
-            link: noteResponse.link,
-            flags: noteResponse.flags,
-            description: noteResponse.description,
-          };
+          const updatedNode = this.copyNoteIgnoringChildren(noteResponse);
           if (targetNode.children) {
             updatedNode.children = this.buildNestedObservable(targetNode.children);
           }
@@ -116,41 +113,30 @@ define([
             version: this.notebookVersion
           })
         }).done((noteResponse) => {
-          const createdNote = {
-            id: noteResponse.id,
-            parentId: noteResponse.parentId,
-            title: noteResponse.title,
-            link: noteResponse.link,
-            flags: noteResponse.flags,
-            description: noteResponse.description,
-          };
-          let enclosingArray;
-          if (createdNote.parentId === undefined || createdNote.parentId === null) {
-            //Creating the root note
-            enclosingArray = this.notesTree;
-          } else {
-            //Creating nested note
-            const parentLocation = this.findNodePlace(this.notesTree, createdNote.parentId);
-            const parentNote = parentLocation.enclosingArray()[parentLocation.index];
-            if (!parentNote.children) {
-              const updatedParent = {
-                id: parentNote.id,
-                parentId: parentNote.parentId,
-                title: parentNote.title,
-                link: parentNote.link,
-                flags: parentNote.flags,
-                description: parentNote.description,
-                children: ko.observableArray([createdNote])
-              };
-              this.replaceNote(parentLocation, updatedParent);
-              this.notebookVersion++;
-              return;
-            }
-            enclosingArray = parentNote.children;
-          }
-          this.insertNoteOrdered(enclosingArray, createdNote);
+          const createdNote = this.copyNoteIgnoringChildren(noteResponse);
+          this.attachNote(createdNote);
           this.notebookVersion++;
         });
+      }
+
+      attachNote(note) {
+        let enclosingArray;
+        if (note.parentId === undefined || note.parentId === null) {
+          //Creating the root note
+          enclosingArray = this.notesTree;
+        } else {
+          //Creating nested note
+          const parentLocation = this.findNodePlace(this.notesTree, note.parentId);
+          const parentNote = parentLocation.enclosingArray()[parentLocation.index];
+          if (!parentNote.children) {
+            const updatedParent = this.copyNoteIgnoringChildren(parentNote);
+            updatedParent.children = ko.observableArray([note]);
+            this.replaceNote(parentLocation, updatedParent);
+            return;
+          }
+          enclosingArray = parentNote.children;
+        }
+        this.insertNoteOrdered(enclosingArray, note);
       }
 
       replaceNote(targetLocation, updatedNode) {
@@ -202,23 +188,44 @@ define([
             version: this.notebookVersion
           })
         }).done(() => {
-          const targetLocation = this.findNodePlace(this.notesTree, note.id);
-          if (targetLocation.enclosingArray().length === 1 && note.parentId) {
-            //If we are removing the last child, we should set enclosing array to null for tree component to change the icon
-            const parentLocation = this.findNodePlace(this.notesTree, note.parentId);
-            const parentNote = parentLocation.enclosingArray()[parentLocation.index];
-            const updatedParent = {
-              id: parentNote.id,
-              parentId: parentNote.parentId,
-              title: parentNote.title,
-              link: parentNote.link,
-              flags: parentNote.flags,
-              description: parentNote.description,
-            };
-            this.replaceNote(parentLocation, updatedParent);
-          } else {
-            targetLocation.enclosingArray.splice(targetLocation.index, 1);
+          this.detachNote(note);
+          this.notebookVersion++;
+        });
+      }
+
+      detachNote(note) {
+        const targetLocation = this.findNodePlace(this.notesTree, note.id);
+        if (targetLocation.enclosingArray().length === 1 && note.parentId) {
+          //If we are removing the last child, we should set enclosing array to null for tree component to change the icon
+          const parentLocation = this.findNodePlace(this.notesTree, note.parentId);
+          const parentNote = parentLocation.enclosingArray()[parentLocation.index];
+          const updatedParent = this.copyNoteIgnoringChildren(parentNote);
+          this.replaceNote(parentLocation, updatedParent);
+        } else {
+          targetLocation.enclosingArray.splice(targetLocation.index, 1);
+        }
+      }
+
+      moveNote(noteId, newParentId) {
+        return $.ajax({
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
+          type: 'PATCH',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            id: noteId,
+            parentId: newParentId,
+            version: this.notebookVersion
+          })
+        }).done(() => {
+          const targetLocation = this.findNodePlace(this.notesTree, noteId);
+          const targetNote = targetLocation.enclosingArray()[targetLocation.index];
+          const movedNote = this.copyNoteIgnoringChildren(targetNote);
+          movedNote.parentId = newParentId;
+          if (targetNote.children) {
+            movedNote.children = this.buildNestedObservable(targetNote.children);
           }
+          this.detachNote(targetNote);
+          this.attachNote(movedNote);
           this.notebookVersion++;
         });
       }
@@ -252,6 +259,7 @@ define([
         this.updateNote = this.updateNote.bind(this);
         this.createNote = this.createNote.bind(this);
         this.deleteNote = this.deleteNote.bind(this);
+        this.moveNote = this.moveNote.bind(this);
       }
 
     }

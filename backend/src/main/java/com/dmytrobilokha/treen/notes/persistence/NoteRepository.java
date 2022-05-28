@@ -53,4 +53,12 @@ public class NoteRepository {
         return queryExecutor.delete(new DeleteNoteQuery(id, userId, version));
     }
 
+    public int moveNote(long id, long newParentId, long userId, long version) throws DbException {
+        return queryExecutor.update(new MoveNoteQuery(id, newParentId, userId, version));
+    }
+
+    public int moveNoteToRoot(long id, long userId, long version) throws DbException {
+        return queryExecutor.update(new MoveNoteToRootQuery(id, userId, version));
+    }
+
 }
