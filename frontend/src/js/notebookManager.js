@@ -180,11 +180,10 @@ define([
 
       deleteNote(note) {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note/${note.id}`,
           type: 'DELETE',
           contentType: 'application/json',
           data: JSON.stringify({
-            id: note.id,
             version: this.notebookVersion
           })
         }).done(() => {

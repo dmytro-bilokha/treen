@@ -7,6 +7,8 @@ import com.dmytrobilokha.treen.notes.service.NotebookService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,6 +16,7 @@ import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -70,13 +73,15 @@ public class NotebookResource {
     }
 
     @DELETE
-    @Path("note")
+    @Path("note/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteNotes(DeleteNoteRequest request) throws InternalApplicationException, InvalidInputException {
-        requestValidator.validateDelete(request);
+    public Response deleteNotes(
+            @PathParam("id") @NotNull(message = "Note id must be provided") Long id,
+            @Valid DeleteNoteRequest request
+    ) throws InternalApplicationException, InvalidInputException {
         notebookService.removeNoteWithChildren(
-                request.getId(), userSessionData.getAuthenticatedUserId(), request.getVersion());
+                id, userSessionData.getAuthenticatedUserId(), request.getVersion());
         return Response.ok().build();
     }
 
