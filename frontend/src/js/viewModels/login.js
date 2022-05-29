@@ -22,8 +22,9 @@ define([
         this.loginErrors = ko.observableArray();
         this.passwordText = ko.observable('');
         this.passwordErrors = ko.observableArray();
-        this.rememberMeSet = ko.observableArray();
+        this.rememberMeSet = ko.observableArray(['rememberMe']);
         this.inputDisabled = ko.observable(false);
+
         this.loginAction = () => {
           this.loginErrors.removeAll();
           this.passwordErrors.removeAll();
