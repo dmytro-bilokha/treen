@@ -99,7 +99,8 @@ define([
             title: context.data.title,
             link: context.data.link,
             flags: context.data.flags,
-            description: context.data.description
+            description: context.data.description,
+            hasChildren: context.data.children ? true : false
           } : null;
         };
 
@@ -131,7 +132,7 @@ define([
                 break;
 
               case 'delete':
-                if (actionNote.children) {
+                if (actionNote.hasChildren) {
                   this.openDeleteDialog(actionNote);
                 } else {
                   notebookManager.deleteNote(actionNote)
