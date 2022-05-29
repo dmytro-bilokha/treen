@@ -23,6 +23,7 @@ define([
       logout() {
         return $.ajax({
           url: `${appConstants.CONTEXT_PATH}/auth/logout`,
+          type: 'POST'
         }).done(() => {
           this.userLogin('');
         });

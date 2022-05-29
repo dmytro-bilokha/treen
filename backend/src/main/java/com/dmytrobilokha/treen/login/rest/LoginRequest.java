@@ -1,30 +1,29 @@
 package com.dmytrobilokha.treen.login.rest;
 
-import javax.annotation.CheckForNull;
+import javax.validation.constraints.Size;
 
 public class LoginRequest {
 
-    @CheckForNull
+
+    @Size(min = 1, max = 120, message = "Login should be between 1 and 120 characters long")
     private String login;
-    @CheckForNull
+    @Size(min = 1, max = 120, message = "Password should be between 1 and 120 characters long")
     private String password;
     private boolean rememberMe;
 
-    @CheckForNull
     public String getLogin() {
         return login;
     }
 
-    public void setLogin(@CheckForNull String login) {
+    public void setLogin(String login) {
         this.login = login;
     }
 
-    @CheckForNull
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(@CheckForNull String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

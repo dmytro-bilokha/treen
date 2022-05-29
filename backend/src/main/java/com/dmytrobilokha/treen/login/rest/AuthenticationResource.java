@@ -1,7 +1,6 @@
 package com.dmytrobilokha.treen.login.rest;
 
 import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
-import com.dmytrobilokha.treen.infra.exception.InvalidInputException;
 import com.dmytrobilokha.treen.infra.rest.ExceptionResponse;
 import com.dmytrobilokha.treen.login.service.AuthenticationService;
 import org.slf4j.Logger;
@@ -10,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,7 +24,6 @@ public class AuthenticationResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationResource.class);
     private static final int HALF_HOUR_SECONDS = 3600 / 2;
-    private static final int MAX_LOG_PASSWD_LENGTH = 120;
 
     private UserSessionData userSessionData;
     private AuthenticationService authenticationService;
@@ -44,17 +42,10 @@ public class AuthenticationResource {
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(@Context HttpServletRequest request, LoginRequest loginRequest)
-        throws InternalApplicationException, InvalidInputException {
+    public Response login(@Context HttpServletRequest request, @Valid LoginRequest loginRequest)
+        throws InternalApplicationException {
         var login = loginRequest.getLogin();
         var password = loginRequest.getPassword();
-        if (login == null || password == null) {
-            throw new InvalidInputException("Both login and password must be provided");
-        }
-        if (login.length() > MAX_LOG_PASSWD_LENGTH || password.length() > MAX_LOG_PASSWD_LENGTH) {
-            throw new InvalidInputException("Both login and password should be less than "
-                    + MAX_LOG_PASSWD_LENGTH + " characters");
-        }
         var userEntity = authenticationService.checkUserCredentials(login, password.toCharArray());
         if (userEntity != null) {
             invalidateRequestSession(request);
@@ -70,7 +61,7 @@ public class AuthenticationResource {
                 .build();
     }
 
-    @GET
+    @POST
     @Path("logout")
     public Response logout(@Context HttpServletRequest request) {
         userSessionData.registerLogout();
