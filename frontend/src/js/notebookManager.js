@@ -206,11 +206,10 @@ define([
 
       moveNote(noteId, newParentId) {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note/${noteId}`,
           type: 'PATCH',
           contentType: 'application/json',
           data: JSON.stringify({
-            id: noteId,
             parentId: newParentId,
             version: this.notebookVersion
           })
