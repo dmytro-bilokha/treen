@@ -26,7 +26,6 @@ import javax.ws.rs.core.Response;
 public class NotebookResource {
 
     private NotebookService notebookService;
-    private NoteRequestValidator requestValidator;
     private NoteRequestConvertor requestConvertor;
     private UserSessionData userSessionData;
 
@@ -37,11 +36,9 @@ public class NotebookResource {
     @Inject
     public NotebookResource(
             NotebookService notebookService,
-            NoteRequestValidator requestValidator,
             NoteRequestConvertor requestConvertor,
             UserSessionData userSessionData) {
         this.notebookService = notebookService;
-        this.requestValidator = requestValidator;
         this.requestConvertor = requestConvertor;
         this.userSessionData = userSessionData;
     }
@@ -53,12 +50,13 @@ public class NotebookResource {
     }
 
     @PUT
-    @Path("note")
+    @Path("note/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public NoteDto updateNote(UpdateNoteRequest request) throws InternalApplicationException, InvalidInputException {
-        requestValidator.validateUpdate(request);
-        var note = requestConvertor.convertUpdateRequest(request);
+    public NoteDto updateNote(
+            @PathParam("id") @NotNull(message = "Note id must be provided") Long id,
+            @Valid ChangeNoteRequest request) throws InternalApplicationException, InvalidInputException {
+        var note = requestConvertor.convertUpdateRequest(id, request);
         return notebookService.updateNote(note);
     }
 
@@ -66,8 +64,8 @@ public class NotebookResource {
     @Path("note")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public NoteDto createNote(CreateNoteRequest request) throws InternalApplicationException, InvalidInputException {
-        requestValidator.validateCreation(request);
+    public NoteDto createNote(
+            @Valid ChangeNoteRequest request) throws InternalApplicationException, InvalidInputException {
         var note = requestConvertor.convertCreateRequest(request);
         return notebookService.createNoteNode(note);
     }
@@ -76,7 +74,7 @@ public class NotebookResource {
     @Path("note/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteNotes(
+    public Response deleteNote(
             @PathParam("id") @NotNull(message = "Note id must be provided") Long id,
             @Valid DeleteNoteRequest request
     ) throws InternalApplicationException, InvalidInputException {
@@ -86,13 +84,14 @@ public class NotebookResource {
     }
 
     @PATCH
-    @Path("note")
+    @Path("note/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response moveNote(MoveNoteRequest request) throws InternalApplicationException, InvalidInputException {
-        requestValidator.validateMove(request);
+    public Response moveNote(
+            @PathParam("id") @NotNull(message = "Note id must be provided") Long id,
+            @Valid MoveNoteRequest request) throws InternalApplicationException, InvalidInputException {
         notebookService.moveNoteWithChildren(
-                request.getId(),
+                id,
                 request.getParentId(),
                 userSessionData.getAuthenticatedUserId(),
                 request.getVersion()

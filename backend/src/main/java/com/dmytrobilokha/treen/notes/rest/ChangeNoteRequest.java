@@ -1,21 +1,28 @@
 package com.dmytrobilokha.treen.notes.rest;
 
 import javax.annotation.CheckForNull;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
-public class CreateNoteRequest {
+@TitleOrLinkRequired
+public class ChangeNoteRequest {
 
     @CheckForNull
     private Long parentId;
+    @Size(max = 150, message = "Title should be no longer than 150 characters")
     @CheckForNull
     private String title;
+    @Size(max = 150, message = "Link should be no longer than 256 characters")
     @CheckForNull
     private String link;
     @CheckForNull
     private List<NoteFlag> flags;
+    @Size(max = 2000, message = "Description should be no longer than 2000 characters")
     @CheckForNull
     private String description;
-    private long version;
+    @NotNull(message = "Version must be provided")
+    private Long version;
 
     @CheckForNull
     public Long getParentId() {
@@ -62,11 +69,11 @@ public class CreateNoteRequest {
         this.description = description;
     }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(Long version) {
         this.version = version;
     }
 }

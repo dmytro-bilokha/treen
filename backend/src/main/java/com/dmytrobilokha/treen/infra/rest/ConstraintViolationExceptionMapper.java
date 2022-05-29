@@ -3,6 +3,7 @@ package com.dmytrobilokha.treen.infra.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,8 +21,8 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
         var message = e
                 .getConstraintViolations()
                 .stream()
-                .map(v -> v.getMessage() + ", got '" + v.getInvalidValue() + "'.")
-                .collect(Collectors.joining(" "));
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining(". "));
         LOG.error("Exception thrown in JAX-RS resource", e);
         return Response
                 .status(Response.Status.BAD_REQUEST)

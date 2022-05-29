@@ -64,10 +64,10 @@
     <div slot="body">
       <oj-form-layout max-columns="1" direction="row">
         <oj-input-text class="oj-form-control-max-width-md" placeholder="Title" label-hint="title"
-          value="{{currentTitle}}" disabled="[[inputDisabled]]">
+          value="{{currentTitle}}" messages-custom="[[titleErrors]]" disabled="[[inputDisabled]]">
         </oj-input-text>
         <oj-input-text class="oj-form-control-max-width-md" placeholder="Link" label-hint="link" value="{{currentLink}}"
-          disabled="[[inputDisabled]]">
+          messages-custom="[[linkErrors]]" disabled="[[inputDisabled]]">
         </oj-input-text>
         <oj-text-area class="oj-form-control-max-width-md" value="{{currentDescription}}" label-hint="description"
           rows="5">

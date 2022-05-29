@@ -24,7 +24,7 @@ public class NoteRequestConvertor {
         this.userSessionData = userSessionData;
     }
 
-    NewNote convertCreateRequest(CreateNoteRequest request) {
+    NewNote convertCreateRequest(ChangeNoteRequest request) {
         return new NewNote(
                 request.getParentId(),
                 userSessionData.getAuthenticatedUserId(),
@@ -36,9 +36,9 @@ public class NoteRequestConvertor {
         );
     }
 
-    Note convertUpdateRequest(UpdateNoteRequest request) {
+    Note convertUpdateRequest(long id, ChangeNoteRequest request) {
         return new Note(
-                request.getId(),
+                id,
                 request.getParentId(),
                 userSessionData.getAuthenticatedUserId(),
                 request.getTitle(),

@@ -74,11 +74,10 @@ define([
 
       updateNote(note) {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
+          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note/${note.id}`,
           type: 'PUT',
           contentType: 'application/json',
           data: JSON.stringify({
-            id: note.id,
             parentId: note.parentId,
             title: note.title,
             link: note.link,

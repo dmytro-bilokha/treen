@@ -1,21 +1,14 @@
 package com.dmytrobilokha.treen.notes.rest;
 
 import javax.annotation.CheckForNull;
+import javax.validation.constraints.NotNull;
 
 public class MoveNoteRequest {
 
-    private long id;
     @CheckForNull
     private Long parentId;
-    private long version;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    @NotNull(message = "Version must be provided")
+    private Long version;
 
     @CheckForNull
     public Long getParentId() {
@@ -26,11 +19,11 @@ public class MoveNoteRequest {
         this.parentId = parentId;
     }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(Long version) {
         this.version = version;
     }
 
