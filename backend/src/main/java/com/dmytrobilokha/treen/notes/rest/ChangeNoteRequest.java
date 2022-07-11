@@ -13,7 +13,7 @@ public class ChangeNoteRequest {
     @Size(max = 150, message = "Title should be no longer than 150 characters")
     @CheckForNull
     private String title;
-    @Size(max = 150, message = "Link should be no longer than 256 characters")
+    @Size(max = 8192, message = "Link should be no longer than 8192 characters")
     @CheckForNull
     private String link;
     @CheckForNull
