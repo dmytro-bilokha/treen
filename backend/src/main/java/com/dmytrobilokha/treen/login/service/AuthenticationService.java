@@ -22,6 +22,7 @@ public class AuthenticationService implements AuthenticationServiceMXBean {
 
     private static final int HASHING_ITERATIONS = 350000;
     private static final int PBE_KEY_BITS = 128;
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private UserRepository userRepository;
 
@@ -76,8 +77,7 @@ public class AuthenticationService implements AuthenticationServiceMXBean {
 
     private byte[] generateSalt() {
         var salt = new byte[16];
-        var random = new SecureRandom();
-        random.nextBytes(salt);
+        SECURE_RANDOM.nextBytes(salt);
         return salt;
     }
 

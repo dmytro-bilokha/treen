@@ -8,11 +8,12 @@
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE" />
     </Match>
     <Match>
-        <Class name="com.dmytrobilokha.treen.login.persistence.UserEntity" />
-        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
-    </Match>
-    <Match>
         <!-- Sometimes we implement compareTo() without overriding equals() -->
         <Bug pattern="EQ_COMPARETO_USE_OBJECT_EQUALS" />
+    </Match>
+    <Match>
+        <!-- SpotBugs complains on dependency injected mutable objects in final fields or object with only getters
+                returning mutable value -->
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
     </Match>
 </FindBugsFilter>
