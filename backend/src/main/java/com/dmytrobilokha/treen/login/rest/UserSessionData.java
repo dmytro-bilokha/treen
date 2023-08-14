@@ -1,7 +1,8 @@
 package com.dmytrobilokha.treen.login.rest;
 
+import jakarta.enterprise.context.SessionScoped;
+
 import javax.annotation.CheckForNull;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 
 @SessionScoped

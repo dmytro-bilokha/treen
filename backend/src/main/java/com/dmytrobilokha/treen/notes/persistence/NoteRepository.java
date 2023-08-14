@@ -2,10 +2,10 @@ package com.dmytrobilokha.treen.notes.persistence;
 
 import com.dmytrobilokha.treen.infra.db.DbException;
 import com.dmytrobilokha.treen.infra.db.DbQueryExecutor;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import javax.annotation.CheckForNull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped

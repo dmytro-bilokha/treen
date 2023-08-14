@@ -1,7 +1,7 @@
 package com.dmytrobilokha.treen.notes.rest;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class ChangeNoteTitleLinkValidator implements ConstraintValidator<TitleOrLinkRequired, ChangeNoteRequest> {
 

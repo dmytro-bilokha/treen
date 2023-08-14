@@ -9,11 +9,11 @@ import com.dmytrobilokha.treen.notes.persistence.NoteRepository;
 import com.dmytrobilokha.treen.notes.rest.NoteDto;
 import com.dmytrobilokha.treen.notes.rest.NoteFlag;
 import com.dmytrobilokha.treen.notes.rest.NotebookDto;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import javax.annotation.CheckForNull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

@@ -2,10 +2,10 @@ package com.dmytrobilokha.treen.login.persistence;
 
 import com.dmytrobilokha.treen.infra.db.DbException;
 import com.dmytrobilokha.treen.infra.db.DbQueryExecutor;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import javax.annotation.CheckForNull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @ApplicationScoped
 public class UserRepository {

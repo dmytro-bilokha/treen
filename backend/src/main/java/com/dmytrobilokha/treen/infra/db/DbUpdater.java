@@ -1,11 +1,11 @@
 package com.dmytrobilokha.treen.infra.db;
 
-import org.flywaydb.core.api.configuration.FluentConfiguration;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @ApplicationScoped
@@ -26,11 +26,13 @@ public class DbUpdater {
 
     public void update() {
         LOGGER.info("Initializing flyway DB migration");
-        var flyway = new FluentConfiguration()
+        var flyway = Flyway
+                .configure()
                 .dataSource(dataSource)
                 .locations("classpath:db-script")
                 .baselineVersion("0.0.0")
                 .baselineOnMigrate(true)
+                .failOnMissingLocations(true)
                 .load();
         flyway.migrate();
     }

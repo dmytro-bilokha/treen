@@ -1,7 +1,8 @@
 package com.dmytrobilokha.treen.notes.rest;
 
+import jakarta.validation.constraints.NotNull;
+
 import javax.annotation.CheckForNull;
-import javax.validation.constraints.NotNull;
 
 public class MoveNoteRequest {
 

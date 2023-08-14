@@ -52,7 +52,7 @@ define([
 
       init() {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook`,
+          url: AppConstants.NOTEBOOK_URL,
         }).done((notebook) => {
           this.notebookVersion = notebook.version;
           this.notesTree(this.buildNestedObservable(notebook.notes)());
@@ -74,7 +74,7 @@ define([
 
       updateNote(note) {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note/${note.id}`,
+          url: `${AppConstants.NOTE_URL}/${note.id}`,
           type: 'PUT',
           contentType: 'application/json',
           data: JSON.stringify({
@@ -100,7 +100,7 @@ define([
 
       createNote(note) {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note`,
+          url: AppConstants.NOTE_URL,
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({
@@ -179,7 +179,7 @@ define([
 
       deleteNote(note) {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note/${note.id}`,
+          url: `${AppConstants.NOTE_URL}/${note.id}`,
           type: 'DELETE',
           contentType: 'application/json',
           data: JSON.stringify({
@@ -206,7 +206,7 @@ define([
 
       moveNote(noteId, newParentId) {
         return $.ajax({
-          url: `${AppConstants.CONTEXT_PATH}/api/notebook/note/${noteId}`,
+          url: `${AppConstants.NOTE_URL}/${noteId}`,
           type: 'PATCH',
           contentType: 'application/json',
           data: JSON.stringify({

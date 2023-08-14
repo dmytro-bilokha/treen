@@ -4,10 +4,10 @@ import com.dmytrobilokha.treen.login.rest.UserSessionData;
 import com.dmytrobilokha.treen.notes.persistence.NewNote;
 import com.dmytrobilokha.treen.notes.persistence.Note;
 import com.dmytrobilokha.treen.notes.service.LinkType;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import javax.annotation.CheckForNull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped

@@ -4,13 +4,13 @@ import com.dmytrobilokha.treen.infra.db.DbException;
 import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
 import com.dmytrobilokha.treen.login.persistence.UserEntity;
 import com.dmytrobilokha.treen.login.persistence.UserRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import javax.annotation.CheckForNull;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;

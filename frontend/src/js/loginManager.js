@@ -9,7 +9,7 @@ define([
 
       login(login, password, rememberMe) {
         return $.ajax({
-          url: `${appConstants.CONTEXT_PATH}/auth/login`,
+          url: `${appConstants.AUTH_URL}/login`,
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({ login: login, password: password, rememberMe: rememberMe})
@@ -22,7 +22,7 @@ define([
 
       logout() {
         return $.ajax({
-          url: `${appConstants.CONTEXT_PATH}/auth/logout`,
+          url: `${appConstants.AUTH_URL}/logout`,
           type: 'POST'
         }).done(() => {
           this.userLogin('');
@@ -31,7 +31,7 @@ define([
 
       init() {
         $.ajax({
-          url: `${appConstants.CONTEXT_PATH}/api/user`,
+          url: appConstants.USER_URL,
         }).done((data) => {
           this.userLogin(data.login);
         }).fail(() => {

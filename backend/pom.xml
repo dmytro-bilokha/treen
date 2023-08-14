@@ -8,8 +8,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <flyway.version>9.20.1</flyway.version>
-        <javaee.api.version>8.0.1</javaee.api.version>
+        <flyway.version>9.21.1</flyway.version>
+        <jakarta.platform.version>9.1.0</jakarta.platform.version>
         <jsr305.version>3.0.2</jsr305.version>
         <slf4j.version>2.0.7</slf4j.version>
         <testng.version>7.8.0</testng.version>
@@ -31,7 +31,7 @@
         <maven.versions.plugin.version>2.7</maven.versions.plugin.version>
         <maven.tomcat7.plugin.version>2.2</maven.tomcat7.plugin.version>
 
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -43,9 +43,14 @@
             <version>${flyway.version}</version>
         </dependency>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>${javaee.api.version}</version>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakarta.platform.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

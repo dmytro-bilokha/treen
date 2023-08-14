@@ -1,6 +1,6 @@
 package com.dmytrobilokha.treen.login.rest;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 public class LoginRequest {
 
