@@ -7,7 +7,7 @@
       disabled="[[inputDisabled]]">
     </oj-input-text>
     <oj-input-password placeholder="Password" label-hint="password" messages-custom="[[passwordErrors]]"
-      value="{{passwordText}}" disabled="[[inputDisabled]]" mask-icon="visible">
+      value="{{passwordText}}" on-value-changed="[[passwordTypeAction]]" disabled="[[inputDisabled]]" mask-icon="visible">
     </oj-input-password>
     <oj-checkboxset id="remember-me-checkbox" value="{{rememberMeSet}}" disabled="[[inputDisabled]]">
       <oj-option value="rememberMe">Remember me</oj-option>

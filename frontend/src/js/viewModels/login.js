@@ -24,6 +24,13 @@ define([
         this.passwordErrors = ko.observableArray();
         this.rememberMeSet = ko.observableArray(['rememberMe']);
         this.inputDisabled = ko.observable(false);
+        
+        this.passwordTypeAction = (e) => {
+          if (e.detail.originalEvent.key === "Enter") {
+            this.loginAction();
+          }
+          return true;
+        };
 
         this.loginAction = () => {
           this.loginErrors.removeAll();
