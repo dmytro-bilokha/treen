@@ -2,6 +2,7 @@ package com.dmytrobilokha.treen.notes.service;
 
 import com.dmytrobilokha.treen.infra.db.DbException;
 import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
+import com.dmytrobilokha.treen.infra.exception.InvalidInputException;
 import com.dmytrobilokha.treen.infra.exception.OptimisticLockException;
 import com.dmytrobilokha.treen.notes.gpx.GpxPoint;
 import com.dmytrobilokha.treen.notes.gpx.GpxRoot;
@@ -174,18 +175,48 @@ public class NotebookService {
     }
 
     public void moveNoteWithChildren(
-            long id,
+            long noteId,
             @CheckForNull Long newParentId,
             long userId,
-            long version) throws InternalApplicationException, OptimisticLockException {
+            long version) throws InternalApplicationException, InvalidInputException {
+        if (newParentId == null) {
+            moveNoteToRoot(noteId, userId, version);
+        } else {
+            moveNoteToNewParent(noteId, newParentId, userId, version);
+        }
+    }
+
+    private void moveNoteToRoot(
+            long noteId, long userId, long version) throws InternalApplicationException, OptimisticLockException {
         int count;
         try {
-            if (newParentId == null) {
-                count = noteRepository.moveNoteToRoot(id, userId, version);
-            } else {
-                //TODO: add a check to avoid loop creation
-                count = noteRepository.moveNote(id, newParentId, userId, version);
-            }
+            count = noteRepository.moveNoteToRoot(noteId, userId, version);
+        } catch (DbException e) {
+            throw new InternalApplicationException("Failed to move the note", e);
+        }
+        if (count == 0) {
+            throw new OptimisticLockException("Unable to move the note, your version is outdated");
+        }
+    }
+
+    private void moveNoteToNewParent(
+            long noteId,
+            long newParentId,
+            long userId,
+            long version) throws InvalidInputException, InternalApplicationException {
+        var notesGroup = fetchNoteFamily(noteId, userId);
+        if (notesGroup == null) {
+            throw new InvalidInputException("Notes don't exist");
+        }
+        var circleDetected = notesGroup.offspring()
+                .stream()
+                .anyMatch(n -> Objects.equals(n.getId(), newParentId));
+        if (circleDetected) {
+            throw new InvalidInputException("Notes should be a tree, not a circle");
+        }
+        int count;
+        try {
+            count = noteRepository.moveNote(noteId, newParentId, userId, version);
         } catch (DbException e) {
             throw new InternalApplicationException("Failed to move the note", e);
         }
@@ -195,8 +226,8 @@ public class NotebookService {
     }
 
     @CheckForNull
-    public GpxRoot exportChildren(long id, long userId) throws InternalApplicationException {
-        var noteFamily = fetchNoteFamily(id, userId);
+    public GpxRoot exportChildren(long noteId, long userId) throws InternalApplicationException {
+        var noteFamily = fetchNoteFamily(noteId, userId);
         if (noteFamily == null) {
             return null;
         }
