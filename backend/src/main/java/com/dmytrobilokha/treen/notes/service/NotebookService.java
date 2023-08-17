@@ -3,6 +3,8 @@ package com.dmytrobilokha.treen.notes.service;
 import com.dmytrobilokha.treen.infra.db.DbException;
 import com.dmytrobilokha.treen.infra.exception.InternalApplicationException;
 import com.dmytrobilokha.treen.infra.exception.OptimisticLockException;
+import com.dmytrobilokha.treen.notes.gpx.GpxPoint;
+import com.dmytrobilokha.treen.notes.gpx.GpxRoot;
 import com.dmytrobilokha.treen.notes.persistence.NewNote;
 import com.dmytrobilokha.treen.notes.persistence.Note;
 import com.dmytrobilokha.treen.notes.persistence.NoteRepository;
@@ -16,9 +18,14 @@ import jakarta.transaction.Transactional;
 import javax.annotation.CheckForNull;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 @Transactional(rollbackOn = Exception.class)
@@ -176,6 +183,7 @@ public class NotebookService {
             if (newParentId == null) {
                 count = noteRepository.moveNoteToRoot(id, userId, version);
             } else {
+                //TODO: add a check to avoid loop creation
                 count = noteRepository.moveNote(id, newParentId, userId, version);
             }
         } catch (DbException e) {
@@ -186,4 +194,65 @@ public class NotebookService {
         }
     }
 
+    @CheckForNull
+    public GpxRoot exportChildren(long id, long userId) throws InternalApplicationException {
+        var noteFamily = fetchNoteFamily(id, userId);
+        if (noteFamily == null) {
+            return null;
+        }
+        var points = noteFamily.offspring()
+                .stream()
+                .map(this::convertToGpxPoint)
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparing(GpxPoint::getName).thenComparing(GpxPoint::getDescription))
+                .toList();
+        return new GpxRoot(noteFamily.ancestor().getTitle(), points);
+    }
+
+    @CheckForNull
+    private GpxPoint convertToGpxPoint(Note note) {
+        var title = note.getTitle();
+        if (title == null || title.isBlank()) {
+            return null;
+        }
+        var link = note.getLink();
+        if (link == null || !LinkPatternConstants.PROCESSED_GEO_LINK.matcher(link).matches()) {
+            return null;
+        }
+        var linkCoordinates = link.substring(LinkPatternConstants.GEO_PREFIX_LENGTH).split(",");
+        var lat = linkCoordinates[0];
+        var lon = linkCoordinates[1];
+        return new GpxPoint(lat, lon, title, note.getDescription());
+    }
+
+    @CheckForNull
+    private NoteFamily fetchNoteFamily(long ancestorNoteId, long userId) throws InternalApplicationException {
+        List<Note> userNotes;
+        try {
+            userNotes = noteRepository.fetchNotes(userId);
+        } catch (DbException e) {
+            throw new InternalApplicationException("Failed to fetch user notes from the DB", e);
+        }
+        var noteById = userNotes.stream()
+                .collect(Collectors.toMap(Note::getId, Function.identity()));
+        var ancestor = noteById.get(ancestorNoteId);
+        if (ancestor == null) {
+            return null;
+        }
+        var notesByParentId = userNotes.stream()
+                .filter(n -> n.getParentId() != null)
+                .collect(Collectors.groupingBy(Note::getParentId));
+        var offspring = new ArrayList<Note>();
+        var parentIds = new LinkedList<Long>();
+        parentIds.add(ancestorNoteId);
+        while (!parentIds.isEmpty()) {
+            var parentId = parentIds.removeFirst();
+            var childrenGroup = notesByParentId.getOrDefault(parentId, List.of());
+            offspring.addAll(childrenGroup);
+            childrenGroup.forEach(n -> parentIds.add(n.getId()));
+        }
+        return new NoteFamily(ancestor, offspring);
+    }
+
+    record NoteFamily(Note ancestor, List<Note> offspring) { }
 }

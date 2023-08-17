@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 @SuppressWarnings({"checkstyle:AvoidEscapedUnicodeCharacters", "checkstyle:DeclarationOrder"})
 final class LinkPatternConstants {
 
+    static final Pattern PROCESSED_GEO_LINK = Pattern.compile("geo:(\\+|-)?\\d+\\.\\d+,(\\+|-)?\\d+\\.\\d+");
+    static final int GEO_PREFIX_LENGTH = "geo:".length();
     private static final String PROTOCOL = "(?i:http|https|rtsp|ftp)://";
 
     static final Pattern STARTS_WITH_PROTOCOL = Pattern.compile(PROTOCOL + ".*");

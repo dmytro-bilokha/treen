@@ -191,6 +191,11 @@ define([
         });
       }
 
+      exportGpx(note) {
+        const downloadUrl = `${AppConstants.NOTE_URL}/${note.id}/export-children-gpx`;
+        window.location = downloadUrl;
+      }
+
       detachNote(note) {
         const targetLocation = this.findNodePlace(this.notesTree, note.id);
         if (targetLocation.enclosingArray().length === 1 && note.parentId) {
@@ -257,6 +262,7 @@ define([
         this.createNote = this.createNote.bind(this);
         this.deleteNote = this.deleteNote.bind(this);
         this.moveNote = this.moveNote.bind(this);
+        this.exportGpx = this.exportGpx.bind(this);
       }
 
     }

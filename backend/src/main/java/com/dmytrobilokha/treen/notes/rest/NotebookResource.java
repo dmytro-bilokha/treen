@@ -20,6 +20,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Objects;
+
 @RequestScoped
 @Path("notebook")
 public class NotebookResource {
@@ -97,4 +99,21 @@ public class NotebookResource {
         );
         return Response.ok().build();
     }
+
+    @GET
+    @Path("note/{id}/export-children-gpx")
+    @Produces("application/gpx+xml")
+    public Response exportChildrenToGpx(
+            @PathParam("id") @NotNull(message = "Note id must be provided") Long id
+    ) throws InternalApplicationException, InvalidInputException {
+        var gpxExport = notebookService.exportChildren(id, userSessionData.getAuthenticatedUserId());
+        if (gpxExport == null) {
+            throw new InvalidInputException("Note with provided id doesn't exist");
+        }
+        return Response.ok(gpxExport)
+                .header("Content-Disposition", "attachment; filename=\""
+                            + Objects.requireNonNullElse(gpxExport.getCollectionName(), "note") + "_points.gpx\"")
+                .build();
+    }
+
 }

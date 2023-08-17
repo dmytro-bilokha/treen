@@ -161,7 +161,7 @@
             <property name="customImportOrderRules"
                       value="THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STANDARD_JAVA_PACKAGE###STATIC"/>
             <property name="specialImportsRegExp" value="^javax\."/>
-            <property name="standardPackageRegExp" value="^java\."/>
+            <property name="standardPackageRegExp" value="^java?\."/>
             <property name="sortImportsInGroupAlphabetically" value="true"/>
             <property name="separateLineBetweenGroups" value="false"/>
         </module>
@@ -173,7 +173,7 @@
         <!-- Avoid too complex code -->
         <module name="ClassFanOutComplexity">
             <property name="excludedPackages"
-                value="java.net, java.net.http, java.util, java.util.stream, java.time, java.time.format, javax.annotation, java.util.function, javax.json.bind, javax.ws.rs, javax.validation"/>
+                value="java.net, java.net.http, java.util, java.util.stream, java.time, java.time.format, jakarta.annotation, java.util.function, jakarta.json.bind, jakarta.ws.rs, jakarta.validation"/>
             <property name="max" value="25"/>
         </module>
         <module name="CyclomaticComplexity"/>

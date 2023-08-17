@@ -144,6 +144,10 @@ define([
                 this.cutNote(actionNote);
                 break;
 
+              case 'exportGpx':
+                notebookManager.exportGpx(actionNote);
+                break;
+
               case 'cancelCut':
                 this.cleanCutNote();
                 break;
